@@ -3,11 +3,7 @@ DeLorean
 
 Jeopardy!
 
-FUCKERRUUUUU
+Shout out to FAiRLiGHT, EVEN, CANDELA, #HACK.SE
 
-var ist mein edit?!?
 
-hubababubaub
-LoL
-
-yo!
+FREE ANAKATA osv osv osv
