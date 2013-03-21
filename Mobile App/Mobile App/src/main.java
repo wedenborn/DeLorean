@@ -1,7 +1,7 @@
 public class main {
 
     public static void main(String[] args) {
-        System.out.println("FUuu");
+        System.out.println("http://paintitblack.nu");
     }
 
 }
