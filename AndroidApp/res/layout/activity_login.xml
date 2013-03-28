@@ -33,6 +33,7 @@
 	    android:id="@+id/login_button_register"
 	    android:layout_width="175dip"
 	    android:layout_height="wrap_content"
+	    android:onClick="register"
 	    android:text="@string/login_button_register" />
 
 </LinearLayout>

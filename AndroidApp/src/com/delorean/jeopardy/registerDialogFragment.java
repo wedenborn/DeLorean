@@ -13,10 +13,11 @@ import android.widget.EditText;
 
 import com.example.jeapordytest.R;
 
-public class SignInDialogFragment extends DialogFragment {
+public class registerDialogFragment extends DialogFragment {
 
 public EditText editTextUsername;
 public EditText editTextPassword;
+public EditText editTextConfirm;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -24,29 +25,32 @@ public EditText editTextPassword;
 		// Get the layout inflater
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		
-		View v = inflater.inflate(R.layout.dialog_signin, null);
-		editTextUsername = (EditText) v.findViewById(R.id.signIn_username);
-		editTextPassword = (EditText) v.findViewById(R.id.signIn_password);
+		View v = inflater.inflate(R.layout.dialog_register, null);
+		editTextUsername = (EditText) v.findViewById(R.id.register_username);
+		editTextPassword = (EditText) v.findViewById(R.id.register_password);
+		editTextConfirm = (EditText) v.findViewById(R.id.register_confirm_password);
 		
 		// Inflate and set the layout for the dialog
 		// Pass null as the parent view because its going in the dialog layout
 		builder.setView(v)
 		
 		// Add action buttons
-		.setPositiveButton(R.string.signIn_button_signIn, new DialogInterface.OnClickListener() {
+		.setPositiveButton(R.string.register_button_create, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
 				// Send the positive button event back to the host activity
 				String username = editTextUsername.getText().toString();
 				String password = editTextPassword.getText().toString();
+				String confirm = editTextConfirm.getText().toString();
 				Log.d(HomeActivity.LOG_TAG, username);
 				Log.d(HomeActivity.LOG_TAG, password);
-				mListener.onSignInPositiveClick(username,password);
+				Log.d(HomeActivity.LOG_TAG, confirm);
+				mListener.onRegisterPositiveClick(username,password,confirm);
 			}
 		})
-		.setNegativeButton(R.string.signIn_button_cancel, new DialogInterface.OnClickListener() {
+		.setNegativeButton(R.string.register_button_cancel, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				SignInDialogFragment.this.getDialog().cancel();
+				registerDialogFragment.this.getDialog().cancel();
 			}
 		});      
 		return builder.create();
@@ -56,29 +60,29 @@ public EditText editTextPassword;
 	/* The activity that creates an instance of this dialog fragment must
 	 * implement this interface in order to receive event callbacks.
 	 * Each method passes the DialogFragment in case the host needs to query it. */
-	public interface SignInDialogListener {
-		public void onSignInPositiveClick(String username, String password);
+	public interface registerDialogListener {
+		public void onRegisterPositiveClick(String username, String password, String confirmPassword);
 	}
 
 	// Use this instance of the interface to deliver action events
-	SignInDialogListener mListener;
+	registerDialogListener mListener;
 	
 	
 
-	// Override the Fragment.onAttach() method to instantiate the SignInDialogListener
+	// Override the Fragment.onAttach() method to instantiate the RegisterDialogListener
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		// Verify that the host activity implements the callback interface
 		try {
-			// Instantiate the SignInDialogListener so we can send events to the host
-			mListener = (SignInDialogListener) activity;
+			// Instantiate the RegisterDialogListener so we can send events to the host
+			mListener = (registerDialogListener) activity;
 		} catch (ClassCastException e) {
 			// The activity doesn't implement the interface, throw exception
 			throw new ClassCastException(activity.toString()
-					+ " must implement SignInDialogListener");
+					+ " must implement registerDialogListener");
 		}
 	}
 
 
-} //End SignInDialogFragment class
+} //End RegisterDialogFragment class

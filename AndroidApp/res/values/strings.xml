@@ -16,6 +16,11 @@
     <string name="signIn_button_signIn">Sign In</string>
     <string name="signIn_button_cancel">Cancel</string>
     
+    <string name="register_title">New account</string>
+    <string name="register_confirm_password">Confirm password</string>
+    <string name="register_button_create">Create</string>
+    <string name="register_button_cancel">Cancel</string>
+    
     <string name="home_title">Main Menu</string>
     <string name="home_button_select_question">Select Question</string>
     <string name="home_button_random_question">Random Question</string>
