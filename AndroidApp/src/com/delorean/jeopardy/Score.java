@@ -1,43 +1,61 @@
 package com.delorean.jeopardy;
 
 public class Score {
-	
+
 	public int numberOfHintsUsed;
-	public int numberOfCorrectAnswes;
+	public int numberOfCorrectAnswers;
 	public double score;
-	
+
 	public Score () {
-		numberOfHintsUsed = 0;
-		numberOfCorrectAnswes = 0;
-		score = 0;
+		this.numberOfHintsUsed = 0;
+		this.numberOfCorrectAnswers = 0;
+		this.score = 0;
 	}
-	
+
 	public Score (int numberOfHintsUsed, int numberOfCorrectAnswers, double score) {
 		this.numberOfHintsUsed = numberOfHintsUsed;
-		this.numberOfCorrectAnswes = numberOfCorrectAnswers;
+		this.numberOfCorrectAnswers = numberOfCorrectAnswers;
 		this.score = score;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Score [numberOfHintsUsed=" + numberOfHintsUsed
+				+ ", numberOfCorrectAnswers=" + numberOfCorrectAnswers
+				+ ", score=" + score + ", average()=" + average() + "]";
+	}
+
 	public double average() {
 		double avg;
-		avg = numberOfHintsUsed / (double) numberOfCorrectAnswes;
+		avg = numberOfHintsUsed / (double) numberOfCorrectAnswers;
 		return avg;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
-	
+	public int getNumberOfHintsUsed() {
+		return numberOfHintsUsed;
+	}
+
+	public void setNumberOfHintsUsed(int numberOfHintsUsed) {
+		this.numberOfHintsUsed = numberOfHintsUsed;
+	}
+
+	public int getNumberOfCorrectAnswers() {
+		return numberOfCorrectAnswers;
+	}
+
+	public void setNumberOfCorrectAnswers(int numberOfCorrectAnswers) {
+		this.numberOfCorrectAnswers = numberOfCorrectAnswers;
+	}
+
+	public double getScore() {
+		return score;
+	}
+
+	public void setScore(double score) {
+		this.score = score;
+	}
+
 } // END Score class
