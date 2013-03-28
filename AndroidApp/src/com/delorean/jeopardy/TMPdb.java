@@ -1,12 +1,14 @@
 package com.delorean.jeopardy;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class TMPdb {
 	public List<TMPuser> users;
 	
 	public TMPdb() {
-		addUser("albert","albert1");
+		users = new LinkedList<TMPuser>();
+		addUser("adam","adam1");
 		addUser("bertil","bertil1");
 		addUser("carl","carl1");
 	}
@@ -32,8 +34,13 @@ public class TMPdb {
 		return false;
 	}
 	
-	
-	
-	
+	public boolean checkLogin(String username, String password) {
+		for(int i=0;i<users.size();i++){
+			if(users.get(i).getUsername().equals(username) && users.get(i).getPassword().equals(password)) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 } // End TMPdb

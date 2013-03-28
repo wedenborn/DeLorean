@@ -15,7 +15,7 @@ public class RoundActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_question);
+		setContentView(R.layout.activity_round);
 		
 		Intent intent = getIntent();
 		int questionID = intent.getIntExtra(HomeActivity.QUESTION_ID,-1);

@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">JeapordyTest</string>
+    <string name="app_name">Jeapordy</string>
     <string name="action_settings">Settings</string>
     
+    <string name="login_title">Log in</string>
+    <string name="login_button_signIn">Sign in</string>
+    <string name="login_button_anonymous">Play Anonymously</string>
+    <string name="login_button_register">Register</string>
+    <string name="login_string_noAccount">No Account?</string>
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>
+    
+    <string name="signIn_title">Sign in</string>
+    <string name="signIn_button_signIn">Sign In</string>
+    <string name="signIn_button_cancel">Cancel</string>
+    
+    <string name="home_title">Main Menu</string>
     <string name="home_button_select_question">Select Question</string>
     <string name="home_button_random_question">Random Question</string>
     <string name="home_button_highscore">Highscore</string>
     <string name="home_button_settings">Settings</string>
     
+    <string name="round_title">Round</string>
     <string name="round_question_id_placeholder">Question 42</string>
     <string name="round_question_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed risus lacus. Curabitur vitae nisi eget risus feugiat sodales?</string>
 	<string name="round_button_answer_1">Answer 1</string>
