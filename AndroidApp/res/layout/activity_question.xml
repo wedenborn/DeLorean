@@ -8,7 +8,7 @@
         android:id="@+id/question_id_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/question_id_placeholder" />
+        android:text="@string/round_question_id_placeholder" />
 
     <TextView
         android:id="@+id/question_text"
@@ -19,34 +19,34 @@
         android:layout_marginRight="20dip"
         android:layout_marginTop="50dip"
         android:layout_weight="5"
-        android:text="@string/question_question_text" />
+        android:text="@string/round_question_text" />
     
     <Button
         android:id="@+id/answer_1"
         android:layout_width="175dip"
         android:layout_height="0dp"
-        android:text="@string/answer_1" 
+        android:text="@string/round_button_answer_1" 
         android:layout_gravity="center"
         android:layout_weight="2" />
     <Button
         android:id="@+id/answer_2"
         android:layout_width="175dip"
         android:layout_height="0dp"
-        android:text="@string/answer_2" 
+        android:text="@string/round_button_answer_2" 
         android:layout_gravity="center"
         android:layout_weight="2" />
     <Button
         android:id="@+id/answer_3"
         android:layout_width="175dip"
         android:layout_height="0dp"
-        android:text="@string/answer_3" 
+        android:text="@string/round_button_answer_3" 
         android:layout_gravity="center"
         android:layout_weight="2" />
     <Button
         android:id="@+id/answer_4"
         android:layout_width="175dip"
         android:layout_height="0dp"
-        android:text="@string/answer_4" 
+        android:text="@string/round_button_answer_4" 
         android:layout_gravity="center"
         android:layout_weight="2" />
     
@@ -54,7 +54,7 @@
         android:id="@+id/hint_button"
         android:layout_width="80dip"
         android:layout_height="0dp"
-        android:text="@string/hint_button_text" 
+        android:text="@string/round_button_hint" 
         android:layout_gravity="center"
         android:layout_weight="3" />
     

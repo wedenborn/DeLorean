@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.delorean.jeopardy.QuestionActivity" 
+            android:name="com.delorean.jeopardy.RoundActivity" 
             android:parentActivityName="android.intent.category.LAUNCHER"
             />  
         

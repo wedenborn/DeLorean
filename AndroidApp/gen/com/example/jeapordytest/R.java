@@ -46,19 +46,18 @@ public final class R {
     }
     public static final class string {
         public static final int action_settings=0x7f050001;
-        public static final int answer_1=0x7f050009;
-        public static final int answer_2=0x7f05000a;
-        public static final int answer_3=0x7f05000b;
-        public static final int answer_4=0x7f05000c;
         public static final int app_name=0x7f050000;
-        public static final int hello_world=0x7f050002;
-        public static final int hint_button_text=0x7f05000d;
-        public static final int home_button_highscore_text=0x7f050005;
-        public static final int home_button_random_question_text=0x7f050004;
-        public static final int home_button_select_question_text=0x7f050003;
-        public static final int home_button_settings_text=0x7f050006;
-        public static final int question_id_placeholder=0x7f050007;
-        public static final int question_question_text=0x7f050008;
+        public static final int home_button_highscore=0x7f050004;
+        public static final int home_button_random_question=0x7f050003;
+        public static final int home_button_select_question=0x7f050002;
+        public static final int home_button_settings=0x7f050005;
+        public static final int round_button_answer_1=0x7f050008;
+        public static final int round_button_answer_2=0x7f050009;
+        public static final int round_button_answer_3=0x7f05000a;
+        public static final int round_button_answer_4=0x7f05000b;
+        public static final int round_button_hint=0x7f05000c;
+        public static final int round_question_id_placeholder=0x7f050006;
+        public static final int round_question_text=0x7f050007;
     }
     public static final class style {
         /** 

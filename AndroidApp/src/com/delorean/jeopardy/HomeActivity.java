@@ -31,7 +31,7 @@ public class HomeActivity extends Activity {
 	}
 	
 	public void toRandomQuestion (View view) {
-		Intent intent = new Intent(this, QuestionActivity.class);
+		Intent intent = new Intent(this, RoundActivity.class);
     	int id = randomQuestionID();
     	Log.d(LOG_TAG, String.valueOf(id));
     	intent.putExtra(QUESTION_ID, id);

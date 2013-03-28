@@ -10,7 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 
-public class QuestionActivity extends Activity {
+public class RoundActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
