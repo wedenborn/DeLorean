@@ -177,6 +177,11 @@ public class RoundActivity extends Activity {
 		}, 2*1000);
 	}
 
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent(this, HomeActivity.class);
+		startActivity(intent);
+	}
 
 }
 

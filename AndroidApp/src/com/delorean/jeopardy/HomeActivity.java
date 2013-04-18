@@ -38,4 +38,10 @@ public class HomeActivity extends Activity {
     	startActivity(intent);
 	}
 	
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent(this, LoginActivity.class);
+		startActivity(intent);
+	}
+	
 }

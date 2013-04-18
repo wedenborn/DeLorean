@@ -23,7 +23,8 @@ public final class R {
     public static final class drawable {
         public static final int green_button_background=0x7f020000;
         public static final int ic_launcher=0x7f020001;
-        public static final int red_button_background=0x7f020002;
+        public static final int newlogo=0x7f020002;
+        public static final int red_button_background=0x7f020003;
     }
     public static final class id {
         public static final int action_settings=0x7f080016;
@@ -61,35 +62,36 @@ public final class R {
         public static final int home=0x7f070000;
     }
     public static final class string {
-        public static final int action_settings=0x7f050001;
-        public static final int app_name=0x7f050000;
-        public static final int home_button_highscore=0x7f050013;
-        public static final int home_button_random_question=0x7f050012;
-        public static final int home_button_select_question=0x7f050011;
-        public static final int home_button_settings=0x7f050014;
-        public static final int home_title=0x7f050010;
-        public static final int login_button_anonymous=0x7f050004;
-        public static final int login_button_register=0x7f050005;
-        public static final int login_button_signIn=0x7f050003;
-        public static final int login_password=0x7f050008;
-        public static final int login_string_noAccount=0x7f050006;
-        public static final int login_title=0x7f050002;
-        public static final int login_username=0x7f050007;
-        public static final int register_button_cancel=0x7f05000f;
-        public static final int register_button_create=0x7f05000e;
-        public static final int register_confirm_password=0x7f05000d;
-        public static final int register_title=0x7f05000c;
-        public static final int round_button_answer_1=0x7f050018;
-        public static final int round_button_answer_2=0x7f050019;
-        public static final int round_button_answer_3=0x7f05001a;
-        public static final int round_button_answer_4=0x7f05001b;
-        public static final int round_button_hint=0x7f05001c;
-        public static final int round_question_id_placeholder=0x7f050016;
-        public static final int round_question_text=0x7f050017;
-        public static final int round_title=0x7f050015;
-        public static final int signIn_button_cancel=0x7f05000b;
-        public static final int signIn_button_signIn=0x7f05000a;
-        public static final int signIn_title=0x7f050009;
+        public static final int action_settings=0x7f050002;
+        public static final int app_name=0x7f050001;
+        public static final int home_button_highscore=0x7f050014;
+        public static final int home_button_random_question=0x7f050013;
+        public static final int home_button_select_question=0x7f050012;
+        public static final int home_button_settings=0x7f050015;
+        public static final int home_title=0x7f050011;
+        public static final int intro_title=0x7f050000;
+        public static final int login_button_anonymous=0x7f050005;
+        public static final int login_button_register=0x7f050006;
+        public static final int login_button_signIn=0x7f050004;
+        public static final int login_password=0x7f050009;
+        public static final int login_string_noAccount=0x7f050007;
+        public static final int login_title=0x7f050003;
+        public static final int login_username=0x7f050008;
+        public static final int register_button_cancel=0x7f050010;
+        public static final int register_button_create=0x7f05000f;
+        public static final int register_confirm_password=0x7f05000e;
+        public static final int register_title=0x7f05000d;
+        public static final int round_button_answer_1=0x7f050019;
+        public static final int round_button_answer_2=0x7f05001a;
+        public static final int round_button_answer_3=0x7f05001b;
+        public static final int round_button_answer_4=0x7f05001c;
+        public static final int round_button_hint=0x7f05001d;
+        public static final int round_question_id_placeholder=0x7f050017;
+        public static final int round_question_text=0x7f050018;
+        public static final int round_title=0x7f050016;
+        public static final int signIn_button_cancel=0x7f05000c;
+        public static final int signIn_button_signIn=0x7f05000b;
+        public static final int signIn_title=0x7f05000a;
     }
     public static final class style {
         /** 
