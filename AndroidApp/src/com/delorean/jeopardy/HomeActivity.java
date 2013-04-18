@@ -13,10 +13,9 @@ import android.view.View;
 
 public class HomeActivity extends Activity {
 	
-	public final static String QUESTION_ID = "com.example.jeopardytest.questionID";
-	public final static String LOG_TAG = "www";
-	public final static int NUMBER_OF_QUESTIONS = 100;
-
+	public final static String QUESTION_ID = "com.delorean.HomeActivity.questionID";
+	public final static String PREVIOUS_QUESTION_ID = "com.delorean.HomeActivity.previousQuestionID";
+	public final static String LOG_TAG = "wwoweee";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,15 +31,11 @@ public class HomeActivity extends Activity {
 	
 	public void toRandomQuestion (View view) {
 		Intent intent = new Intent(this, RoundActivity.class);
-    	int id = randomQuestionID();
-    	Log.d(LOG_TAG, String.valueOf(id));
+    	int id = -1;//randomQuestionID();
+    	int prevID = -1;
     	intent.putExtra(QUESTION_ID, id);
+    	intent.putExtra(PREVIOUS_QUESTION_ID, prevID);
     	startActivity(intent);
 	}
-	//
-	private int randomQuestionID () {
-		Random rand = new Random();
-		return rand.nextInt(NUMBER_OF_QUESTIONS);
-	}
-
+	
 }

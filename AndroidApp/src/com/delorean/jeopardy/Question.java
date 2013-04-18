@@ -1,6 +1,7 @@
 package com.delorean.jeopardy;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Question {
@@ -23,6 +24,7 @@ public class Question {
 
 	public Question() {
 		this.incorrectAnswers = new Answer[3];
+		this.hints = new LinkedList<Hint>();
 	}
 
 	/* (non-Javadoc)
@@ -66,6 +68,20 @@ public class Question {
 	 */
 	public List<Hint> getHints() {
 		return hints;
+	}
+
+	/**
+	 * @param hint add a hint object
+	 */
+	public void addHint(Hint hint) {
+		hints.add(hint);
+	}
+
+	/**
+	 * @param hint add a hint string
+	 */
+	public void addHint(String hint) {
+		hints.add(new Hint(hint));
 	}
 
 	/**
