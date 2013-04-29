@@ -1,0 +1,37 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".HomeActivity" >
+
+    <Button
+        android:id="@+id/home_select_question_button"
+        android:layout_width="175dip"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dip"
+        android:text="@string/home_button_select_question" />
+
+    <Button
+        android:id="@+id/home_andom_question_button"
+        android:layout_width="175dip"
+        android:layout_height="wrap_content"
+        android:onClick="toRandomQuestion"
+        android:text="@string/home_button_random_question" />
+
+    <Button
+        android:id="@+id/home_highscore_button"
+        android:layout_width="175dip"
+        android:layout_height="wrap_content"
+        android:text="@string/home_button_highscore" />
+
+    <Button
+        android:id="@+id/home_settings_button"
+        android:layout_width="175dip"
+        android:layout_height="wrap_content"
+        android:text="@string/home_button_settings" />
+   
+
+</LinearLayout>
