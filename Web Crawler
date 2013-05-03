@@ -30,6 +30,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -39,11 +42,13 @@ import org.jsoup.select.Elements;
  * @author kalle
  */
 public class BasicCrawler extends WebCrawler {
-	static final String[] celebList = new String[166];//{"Marilyn Monroe","Mother Teresa","John F. Kennedy","Martin Luther King","Nelson Mandela"}; 
+	static final String[] celebList = new String[166];//{"Marilyn Monroe","Mother Teresa","John F. Kennedy","Martin Luther King","Nelson Mandela"};
+	static final int MAXIMUM_QUESTION_LENGTH = 180;
 	
 	static ArrayList<String> questions = new ArrayList<String>();
+	static ArrayList<String> answers = new ArrayList<String>();
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws JSONException {
 
 		BasicCrawler crawler = new BasicCrawler();
 		int count = 0;
@@ -66,11 +71,18 @@ public class BasicCrawler extends WebCrawler {
 			crawler.visit(page);
 		}
 		
-		Random random = new Random();
-		for(int i = 0; i < 50; i++){
-			System.out.println(questions.get(random.nextInt(questions.size())));
+//		Random random = new Random();
+//		for(int i = 0; i < 50; i++){
+//			System.out.println(questions.get(random.nextInt(questions.size())));
+//		}
+		JSONObject[] jsons = new JSONObject[questions.size()];
+		for (int i = 0; i < questions.size(); i++) {
+			JSONObject json = new JSONObject();
+			json.put("Question", questions.get(i));
+			json.put("Answer", answers.get(i));
+			jsons[i] = json;
+			System.out.println(json);
 		}
-
 	}
 	/**
 	 * This function is called when a page is fetched and ready to be processed
@@ -84,7 +96,6 @@ public class BasicCrawler extends WebCrawler {
 		System.out.println("URL: " + url);
 		System.out.println("Full Name: " + fullName);
 		System.out.println("Last name: " + lastName);
-		StringBuilder sb = new StringBuilder();
 		try {
 			Document doc = Jsoup.connect(url).get();
 			Elements elements = doc.getAllElements();
@@ -121,9 +132,9 @@ public class BasicCrawler extends WebCrawler {
 							}
 							sentence = sentence.replaceAll(lastName, replacement);
 							
-							if(sentence.length() < 180){
-								sb.append(sentence + ". (Correct answer: " + fullName + ")\n\n");
-								questions.add(sentence+".\n" + "\t(Correct answer: " + fullName + ")\n");
+							if(sentence.length() < MAXIMUM_QUESTION_LENGTH){
+								questions.add(sentence);
+								answers.add(fullName);
 							}
 						}
 					}
