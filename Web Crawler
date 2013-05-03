@@ -1,0 +1,117 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+import edu.uci.ics.crawler4j.crawler.CrawlConfig;
+import edu.uci.ics.crawler4j.crawler.Page;
+import edu.uci.ics.crawler4j.crawler.WebCrawler;
+import edu.uci.ics.crawler4j.parser.HtmlParseData;
+import edu.uci.ics.crawler4j.parser.Parser;
+import edu.uci.ics.crawler4j.url.WebURL;
+
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.http.Header;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+/**
+ * @author kalle
+ */
+public class BasicCrawler extends WebCrawler {
+  static final String[] celebList = {"Marilyn Monroe","Mother Teresa","John F. Kennedy","Martin Luther King","Nelson Mandela"}; 
+	//top 5 from http://www.biographyonline.net/people/famous-100.html
+
+	public static void main(String[] args) {
+
+		BasicCrawler crawler = new BasicCrawler();
+
+		for (int i = 0; i < celebList.length; i++) {
+			WebURL url = new WebURL();
+			url.setURL("https://en.wikipedia.org/wiki/" + celebList[i].replace(" ",	"_"));
+			Page page = new Page(url);
+			crawler.visit(page);
+		}
+
+	}
+	/**
+	 * This function is called when a page is fetched and ready to be processed
+	 * by your program.
+	 */
+	@Override
+	public void visit(Page page) {
+		String url = page.getWebURL().getURL();
+		String fullName = url.substring(url.lastIndexOf("/")+1,url.length()).replace("_"," ");
+		String lastName = url.substring(url.lastIndexOf("_")+1,url.length());
+		System.out.println("URL: " + url);
+		System.out.println("Full Name: " + fullName);
+		System.out.println("Last name: " + lastName);
+		StringBuilder sb = new StringBuilder();
+		try {
+			Document doc = Jsoup.connect(url).get();
+			Elements elements = doc.getAllElements();
+			for (Element element : elements) {
+				if (element.tagName().equals("p") && element.hasText()) { //hämtar alla icke-tomma paragrafer
+					String text = element.text();
+					String regex1 = "[A-Z][.] [A-Z]"; 
+					Pattern pattern1 = Pattern.compile(regex1);
+					Matcher matcher1 = pattern1.matcher(text);
+					StringBuffer buffer1 = new StringBuffer();
+					while (matcher1.find()) {
+						matcher1.appendReplacement(buffer1, matcher1.group().replace(".", "")); 
+						//Tar bort punkterna så att t.ex. "John F. Kennedy" blir "John F Kennedy" (temporär lösning)
+					}
+					matcher1.appendTail(buffer1);
+					String regex2 = "\\[[0-9]+\\]";
+					Pattern pattern2 = Pattern.compile(regex2);
+					Matcher matcher2 = pattern2.matcher(buffer1);
+					StringBuffer buffer2 = new StringBuffer();
+					while (matcher2.find()) {
+						matcher2.appendReplacement(buffer2, "");
+						//Tar bort Wikipedias referenser
+					}
+					matcher2.appendTail(buffer2);
+
+					text = buffer2.toString();
+					String[] sentences = text.split("[.] "); //array där varje element är en mening i paragrafen
+					for(int i = 0; i < sentences.length; i++){
+						if(sentences[i].contains(lastName)){
+							String sentence = sentences[i].trim();
+							String replacement = "THIS PERSON";
+							if(sentence.contains(fullName)){
+								sentence = sentence.replaceAll(fullName, replacement);
+							}
+							sentence = sentence.replaceAll(lastName, replacement);
+							
+							sb.append(sentence + ". (Correct answer: " + fullName + ")\n\n");
+						}
+					}
+
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(sb.toString());
+
+		System.out.println("=============");
+	}
+}
