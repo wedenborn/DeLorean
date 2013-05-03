@@ -24,6 +24,8 @@ import edu.uci.ics.crawler4j.parser.Parser;
 import edu.uci.ics.crawler4j.url.WebURL;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,18 +39,36 @@ import org.jsoup.select.Elements;
  * @author kalle
  */
 public class BasicCrawler extends WebCrawler {
-  static final String[] celebList = {"Marilyn Monroe","Mother Teresa","John F. Kennedy","Martin Luther King","Nelson Mandela"}; 
-	//top 5 from http://www.biographyonline.net/people/famous-100.html
+	static final String[] celebList = new String[166];//{"Marilyn Monroe","Mother Teresa","John F. Kennedy","Martin Luther King","Nelson Mandela"}; 
+	
+	static ArrayList<String> questions = new ArrayList<String>();
 
 	public static void main(String[] args) {
 
 		BasicCrawler crawler = new BasicCrawler();
-
+		int count = 0;
+		try {
+			Document doc = Jsoup.connect("http://www.whoismorefamous.com/?fulllist=1").get();
+			Elements elements = doc.getAllElements();
+			for (Element element : elements) {
+				if (element.tagName().equals("li") && element.hasText()) { //hämtar alla icke-tomma paragrafer
+					celebList[count++] = element.text();
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		for (int i = 0; i < celebList.length; i++) {
 			WebURL url = new WebURL();
 			url.setURL("https://en.wikipedia.org/wiki/" + celebList[i].replace(" ",	"_"));
 			Page page = new Page(url);
 			crawler.visit(page);
+		}
+		
+		Random random = new Random();
+		for(int i = 0; i < 50; i++){
+			System.out.println(questions.get(random.nextInt(questions.size())));
 		}
 
 	}
@@ -96,12 +116,15 @@ public class BasicCrawler extends WebCrawler {
 						if(sentences[i].contains(lastName)){
 							String sentence = sentences[i].trim();
 							String replacement = "THIS PERSON";
-							if(sentence.contains(fullName)){
-								sentence = sentence.replaceAll(fullName, replacement);
+							if(sentence.contains(fullName.replace(".",""))){ //replace(".", "") bara temporärt
+								sentence = sentence.replaceAll(fullName.replace(".", ""), replacement);
 							}
 							sentence = sentence.replaceAll(lastName, replacement);
 							
-							sb.append(sentence + ". (Correct answer: " + fullName + ")\n\n");
+							if(sentence.length() < 180){
+								sb.append(sentence + ". (Correct answer: " + fullName + ")\n\n");
+								questions.add(sentence+".\n" + "\t(Correct answer: " + fullName + ")\n");
+							}
 						}
 					}
 
@@ -110,8 +133,10 @@ public class BasicCrawler extends WebCrawler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println(sb.toString());
+		//System.out.println(sb.toString());
+		
 
 		System.out.println("=============");
+		
 	}
 }
