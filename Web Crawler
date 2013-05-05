@@ -23,10 +23,15 @@ import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.parser.Parser;
 import edu.uci.ics.crawler4j.url.WebURL;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,14 +49,23 @@ import org.jsoup.select.Elements;
  */
 public class BasicCrawler extends WebCrawler {
 	static final String[] celebList = new String[166];//{"Marilyn Monroe","Mother Teresa","John F. Kennedy","Martin Luther King","Nelson Mandela"};
-	static final int MAXIMUM_QUESTION_LENGTH = 180;
+	static final int MAXIMUM_QUESTION_LENGTH = 130;
+	static final int MINIMUM_QUESTION_LENGTH = 40;
 	static final int NUMBER_OF_HINTS = 3;
+	static final String[] namePrefixes = {"De", "Du", "Van der", "Von", "Den", "Van",
+		"D'", "De la", "Le", "La", "Des", "A", "Da", "Del", "Della", "Di", "Li", "Lo", "Dos", "De La", "Las", "Af", "Av"};
+
 	
 	static ArrayList<String> questions = new ArrayList<String>();
 	static ArrayList<String> answers = new ArrayList<String>();
 	static HashMap<String,ArrayList<String>> hints = new HashMap<String,ArrayList<String>>(); //maps answer to array of hints
-
+	static HashMap<String,ArrayList<String>> alternatives = new HashMap<String,ArrayList<String>>();
+	
 	public static void main(String[] args) throws JSONException {
+		Arrays.sort(namePrefixes);
+		for(int i = 0; i < namePrefixes.length; i++){
+			namePrefixes[i] = " " + namePrefixes[i].toLowerCase() + " ";
+		}
 		Random random = new Random();
 		BasicCrawler crawler = new BasicCrawler();
 		int count = 0;
@@ -76,19 +90,46 @@ public class BasicCrawler extends WebCrawler {
 		
 		
 		JSONObject[] jsons = new JSONObject[questions.size()];
-		for (int i = 0; i < questions.size(); i++) {
+		for (int i = 0; i < 10/*questions.size()*/; i++) {
+			int k = random.nextInt(questions.size());
 			JSONObject json = new JSONObject();
-			json.put("Question", questions.get(i));
-			String answer = answers.get(i);
+			json.put("Question", questions.get(k));
+			System.out.println(questions.get(k));
+			String answer = answers.get(k);
 			json.put("Answer", answer);
 			String h[] = new String[NUMBER_OF_HINTS];
 			for(int j = 0; j < h.length; j++){
 				h[j] = hints.get(answer).get(random.nextInt(hints.get(answer).size()));
+				System.out.println(h[j]);
 			}
 			json.put("Hints", h);
-			jsons[i] = json;
-			System.out.println(json);
+			String[] alts = new String[3];
+			for(int j = 0; j < alts.length; j++){
+				alts[j] = alternatives.get(answer).get(random.nextInt(alternatives.get(answer).size()));
+				System.out.println("Alt #" + (j+1) + "\t" + alts[j]);
+			}
+			System.out.println("Alt #" + 4 + "\t" + answer);
+			json.put("Alternatives", alts);
+			System.out.println();
+			jsons[k] = json;
+			/*
+			 * Exempel-utskrift med nuvarande prints:
+			 * 
+			 * 	Critics outside the psychoanalytic movement, whether on the political left or right, saw this person as a conservative.
+				This person spent most of his life in Vienna.
+				This person also believed that the Oedipus complex was bisexual, involving an attraction to both parents.
+				I now consider this to be a universal event in childhood," this person said.
+				Alt #1	Martin Freud
+				Alt #2	William Bullitt
+				Alt #3	Eva Figes
+				Alt #4	Sigmund Freud
+				
+				Ger ett JSON-objekt som ser ut såhär: 
+				
+				{"Anwser":"Sigmund Freud","Question":"Critics...","Alternatives":"["Martin Freud","William Bullitt","Eva Figes"],"Hints":["This person...",...]}
+			 */
 		}
+		
 	}
 	/**
 	 * This function is called when a page is fetched and ready to be processed
@@ -98,19 +139,34 @@ public class BasicCrawler extends WebCrawler {
 	public void visit(Page page) {
 		String url = page.getWebURL().getURL();
 		String fullName = url.substring(url.lastIndexOf("/")+1,url.length()).replace("_"," ");
-		String lastName = url.substring(url.lastIndexOf("_")+1,url.length());
+		String lastName = fullName.substring(fullName.lastIndexOf(" ")+1, fullName.length());
+		for(int prefix = 0; prefix < namePrefixes.length; prefix++){
+			if(fullName.toLowerCase().contains(namePrefixes[prefix])){
+				lastName = (namePrefixes[prefix] + lastName).trim(); 
+				//fixar så att t.ex. Leonardo da Vincis efternamn blir da Vinci och inte Vinci.
+			}
+		}
 		System.out.println("URL: " + url);
 		System.out.println("Full Name: " + fullName);
 		System.out.println("Last name: " + lastName);
 		try {
 			Document doc = Jsoup.connect(url).get();
+			ArrayList<String> names = new ArrayList<String>(); //alternativen (andra namn som förekommer i artikeln)
 			Elements elements = doc.getAllElements();
 			for (Element element : elements) {
 				if (element.tagName().equals("p")) { //hämtar alla icke-tomma paragrafer
 					String text = element.text();
+					
+					String nameRegex = "[A-Z][a-z]+ [A-Z][a-z]+"; //regex för att hämta namn för att ha som alternativ
+					Matcher nameMatcher =  Pattern.compile(nameRegex).matcher(text);
+					while(nameMatcher.find()){
+						if(!names.contains(nameMatcher.group())){
+							names.add(nameMatcher.group());
+						}
+					}
+					
 					String regex1 = "[A-Z][.] [A-Z]"; 
-					Pattern pattern1 = Pattern.compile(regex1);
-					Matcher matcher1 = pattern1.matcher(text);
+					Matcher matcher1 = Pattern.compile(regex1).matcher(text);
 					StringBuffer buffer1 = new StringBuffer();
 					while (matcher1.find()) {
 						matcher1.appendReplacement(buffer1, matcher1.group().replace(".", "")); 
@@ -118,8 +174,7 @@ public class BasicCrawler extends WebCrawler {
 					}
 					matcher1.appendTail(buffer1);
 					String regex2 = "\\[[0-9]+\\]";
-					Pattern pattern2 = Pattern.compile(regex2);
-					Matcher matcher2 = pattern2.matcher(buffer1);
+					Matcher matcher2 = Pattern.compile(regex2).matcher(buffer1);
 					StringBuffer buffer2 = new StringBuffer();
 					while (matcher2.find()) {
 						matcher2.appendReplacement(buffer2, "");
@@ -128,17 +183,23 @@ public class BasicCrawler extends WebCrawler {
 					matcher2.appendTail(buffer2);
 
 					text = buffer2.toString();
+							
 					String[] sentences = text.split("[.] "); //array där varje element är en mening i paragrafen
 					for(int i = 0; i < sentences.length; i++){
 						if(sentences[i].contains(lastName)){
 							String sentence = sentences[i].trim();
-							String replacement = "THIS PERSON";
+							String replacement = "this person";
+							if(sentence.startsWith(fullName) || sentence.startsWith(lastName)) replacement = "This person";
 							if(sentence.contains(fullName.replace(".",""))){ //replace(".", "") bara temporärt
 								sentence = sentence.replaceAll(fullName.replace(".", ""), replacement);
 							}
 							sentence = sentence.replaceAll(lastName, replacement);
+							if(sentence.contains("\\")){
+								System.out.println(sentence);
+							}
+							if(!sentence.endsWith(".")) sentence = sentence + ".";
 							
-							if(sentence.length() < MAXIMUM_QUESTION_LENGTH){
+							if(sentence.length() <= MAXIMUM_QUESTION_LENGTH && sentence.length() >= MINIMUM_QUESTION_LENGTH){
 								questions.add(sentence);
 								answers.add(fullName);
 								ArrayList<String> theseHints = new ArrayList<String>();
@@ -148,9 +209,10 @@ public class BasicCrawler extends WebCrawler {
 							}
 						}
 					}
-
 				}
 			}
+			alternatives.put(fullName, names);
+			System.out.println("\t"+alternatives.get(fullName)); //printar alla alternativ
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
