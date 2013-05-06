@@ -111,7 +111,7 @@ public class BasicCrawler extends WebCrawler {
 					h[j] = personsStatements.get(randomHint);
 				}
 
-				String[] alts = new String[3];
+				String[] alts = new String[NUMBER_OF_ALTERNATIVES];
 				ArrayList<Integer> altNr = new ArrayList<Integer>();
 				for (int j = 0; j < alts.length; j++) {
 					int randAlt = random.nextInt(personsAlternatives.size());
@@ -121,7 +121,7 @@ public class BasicCrawler extends WebCrawler {
 					altNr.add(randAlt);
 					alts[j] = personsAlternatives.get(randAlt);
 				}
-				addJSON(question, h, alts, answer);
+				addJSON(question, alts, h, answer);
 			}
 		}
 		for(int i = 0; i < jsons.length(); i++){
@@ -146,7 +146,6 @@ public class BasicCrawler extends WebCrawler {
 		System.out.println("URL: " + url);
 		System.out.println("Full Name: " + fullName);
 		System.out.println("Last name: " + lastName);
-		System.out.println();
 		try {
 			Document doc = Jsoup.connect(url).get();
 			ArrayList<String> names = new ArrayList<String>(); //alternativen (andra namn som förekommer i artikeln)
@@ -154,13 +153,18 @@ public class BasicCrawler extends WebCrawler {
 			for (Element element : paragraphs) {
 				if(element.hasText()){
 					String text = element.text();
-					String nameRegex = "[A-Z][a-z]+ [A-Z][a-z]+"; //regex för att hämta namn för att ha som alternativ
-					Matcher nameMatcher =  Pattern.compile(nameRegex).matcher(text);
-					while(nameMatcher.find()){
-						if(!names.contains(nameMatcher.group())){
-							names.add(nameMatcher.group());
+					
+					String nameRegex = "[A-Z][a-z]+ [A-Z][a-z]+"; //regex för att hämta namn för att ha som alternativ (exakt 2 ord atm (3 var oftast inte namn))
+					Elements links = doc.select("a[href]");
+					for(Element link : links){
+						Matcher nameMatcher =  Pattern.compile(nameRegex).matcher(link.text());
+						if(nameMatcher.matches()){
+							if(!names.contains(nameMatcher.group())){
+								names.add(nameMatcher.group());
+							}
 						}
 					}
+					
 
 					String regex1 = "[A-Z][.] [A-Z]"; 
 					Matcher matcher1 = Pattern.compile(regex1).matcher(text);
