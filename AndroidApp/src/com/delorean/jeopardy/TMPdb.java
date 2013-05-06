@@ -84,7 +84,7 @@ public class TMPdb {
 		q3.addHint("He was included in The Beast's publication of their 50 Most Loathsome People of 2004.");
 		q3.addHint("He is known for his Scientologist faith and for his support of the Church of Scientology.");
 		questions.add(q3);
-		
+		 
 		Question q4 = new Question();
 		q4.setQuestion("This person's religious zeal grew until he felt he had found his true vocation.");
 		q4.setCorrectAnswer(new Answer("Vincent Van Gogh"));
