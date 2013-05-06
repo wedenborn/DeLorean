@@ -52,12 +52,14 @@ public class BasicCrawler extends WebCrawler {
 	static final int MINIMUM_QUESTION_LENGTH = 40;
 	static final int MAXIMUM_QUESTION_LENGTH = 130;
 	static final int NUMBER_OF_HINTS = 3;
+	static final int NUMBER_OF_ALTERNATIVES = 3;
 	static final String[] namePrefixes = {"De", "Du", "Van der", "Von", "Den", "Van",
 		"D'", "De la", "Le", "La", "Des", "A", "Da", "Del", "Della", "Di", "Li", "Lo", "Dos", "De La", "Las", "Af", "Av"};
 
 	static HashMap<String,ArrayList<String>> statements = new HashMap<String,ArrayList<String>>(); //maps answer to array of statements
 	static HashMap<String,ArrayList<String>> alternatives = new HashMap<String,ArrayList<String>>(); //maps answer to names to use as alternatives
-	
+	static JSONArray jsons = new JSONArray();
+
 	public static void main(String[] args) throws JSONException {
 		Arrays.sort(namePrefixes);
 		for(int i = 0; i < namePrefixes.length; i++){
@@ -68,88 +70,63 @@ public class BasicCrawler extends WebCrawler {
 		int count = 0;
 		try {
 			Document doc = Jsoup.connect("http://www.whoismorefamous.com/?fulllist=1").get();
-			Elements elements = doc.getAllElements();
+			Elements elements = doc.select("li");
 			for (Element element : elements) {
-				if (element.tagName().equals("li") && element.hasText()) { //hämtar alla icke-tomma paragrafer
-					celebList[count++] = element.text();
-				}
+				celebList[count++] = element.text();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		for (int i = 0; i < celebList.length; i++) {
 			WebURL url = new WebURL();
 			url.setURL("https://en.wikipedia.org/wiki/" + celebList[i].replace(" ",	"_"));
 			crawler.visit(new Page(url));
 		}
-		
-		JSONObject[] jsons = new JSONObject[statements.size()];
-		
-		int JSONcount = 0;
+
 		for(String answer : statements.keySet()){
-			JSONObject json = new JSONObject();
-			
-			json.put("Answer", answer);
-			
-			ArrayList<Integer> statementNr = new ArrayList<Integer>();
-			ArrayList<String> list = statements.get(answer);
-			
-			statementNr.add(random.nextInt(list.size()));
-			String question = list.get(statementNr.get(0));
-			json.put("Question", question);
-			System.out.println(question);
-			
-			String h[] = new String[NUMBER_OF_HINTS];
-			for(int j = 0; j < h.length; j++){
-				int randomHint = random.nextInt(list.size());
-				while (statementNr.contains(randomHint)){//to avoid duplicates
-					randomHint = random.nextInt(list.size());
-				}
-				statementNr.add(randomHint);
-				h[j] = list.get(randomHint);
-				System.out.println(h[j]);
+			ArrayList<String> personsStatements = statements.get(answer);
+			while(personsStatements.size() < NUMBER_OF_HINTS + 1){//Inte tillräckligt med meningar hittades
+				personsStatements.add("No more hints available.");
 			}
-			json.put("Hints", h);
-			
-			System.out.println("Alt #1\t" + answer);
-			String[] alts = new String[3];
-			ArrayList<Integer> altNr = new ArrayList<Integer>();
-			for(int j = 0; j < alts.length; j++){
-				int randAlt = random.nextInt(alternatives.get(answer).size());
-				while(altNr.contains(randAlt)){//to avoid duplicates
-					randAlt = random.nextInt(alternatives.get(answer).size());
-				}
-				altNr.add(randAlt);
-				alts[j] = alternatives.get(answer).get(randAlt);
-				System.out.println("Alt #" + (j+2) + "\t" + alts[j]);
+
+			ArrayList<String> personsAlternatives = alternatives.get(answer); 
+			while(personsAlternatives.size() < NUMBER_OF_ALTERNATIVES){//Inte tillräckligt med alternativ hittades
+				personsAlternatives.add("Snurre Sprätt"); 
 			}
-			
-			json.put("Alternatives", alts);
-			System.out.println(json);
-			System.out.println();
-			
-			JSONcount++;
-			jsons[JSONcount] = json;
-			
-			/*
-			 * Exempel-utskrift med nuvarande prints:
-			 * 
-			 * 	Critics outside the psychoanalytic movement, whether on the political left or right, saw this person as a conservative.
-				This person spent most of his life in Vienna.
-				This person also believed that the Oedipus complex was bisexual, involving an attraction to both parents.
-				I now consider this to be a universal event in childhood," this person said.
-				Alt #1	Martin Freud
-				Alt #2	William Bullitt
-				Alt #3	Eva Figes
-				Alt #4	Sigmund Freud
-				
-				Ger ett JSON-objekt som ser ut såhär: 
-				
-				{"Anwser":"Sigmund Freud","Question":"Critics...","Alternatives":"["Martin Freud","William Bullitt","Eva Figes"],"Hints":["This person...",...]}
-			 */
+
+			for (int questionNr = 0; questionNr < personsStatements.size(); questionNr++) {
+
+				String question = personsStatements.get(questionNr);
+				ArrayList<Integer> statementNr = new ArrayList<Integer>();
+				statementNr.add(questionNr);
+
+				String h[] = new String[NUMBER_OF_HINTS];
+				for (int j = 0; j < h.length; j++) {
+					int randomHint = random.nextInt(personsStatements.size());
+					while (statementNr.contains(randomHint)) {//to avoid duplicates
+						randomHint = random.nextInt(personsStatements.size());
+					}
+					statementNr.add(randomHint);
+					h[j] = personsStatements.get(randomHint);
+				}
+
+				String[] alts = new String[3];
+				ArrayList<Integer> altNr = new ArrayList<Integer>();
+				for (int j = 0; j < alts.length; j++) {
+					int randAlt = random.nextInt(personsAlternatives.size());
+					while (altNr.contains(randAlt)) {//to avoid duplicates
+						randAlt = random.nextInt(personsAlternatives.size());
+					}
+					altNr.add(randAlt);
+					alts[j] = personsAlternatives.get(randAlt);
+				}
+				addJSON(question, h, alts, answer);
+			}
 		}
-		
+		for(int i = 0; i < jsons.length(); i++){
+			System.out.println(jsons.opt(i));
+		}
 	}
 	/**
 	 * This function is called when a page is fetched and ready to be processed
@@ -169,14 +146,14 @@ public class BasicCrawler extends WebCrawler {
 		System.out.println("URL: " + url);
 		System.out.println("Full Name: " + fullName);
 		System.out.println("Last name: " + lastName);
+		System.out.println();
 		try {
 			Document doc = Jsoup.connect(url).get();
 			ArrayList<String> names = new ArrayList<String>(); //alternativen (andra namn som förekommer i artikeln)
-			Elements elements = doc.getAllElements();
-			for (Element element : elements) {
-				if (element.tagName().equals("p")) { //hämtar alla icke-tomma paragrafer
+			Elements paragraphs = doc.select("p");
+			for (Element element : paragraphs) {
+				if(element.hasText()){
 					String text = element.text();
-					
 					String nameRegex = "[A-Z][a-z]+ [A-Z][a-z]+"; //regex för att hämta namn för att ha som alternativ
 					Matcher nameMatcher =  Pattern.compile(nameRegex).matcher(text);
 					while(nameMatcher.find()){
@@ -184,7 +161,7 @@ public class BasicCrawler extends WebCrawler {
 							names.add(nameMatcher.group());
 						}
 					}
-					
+
 					String regex1 = "[A-Z][.] [A-Z]"; 
 					Matcher matcher1 = Pattern.compile(regex1).matcher(text);
 					StringBuffer buffer1 = new StringBuffer();
@@ -201,9 +178,8 @@ public class BasicCrawler extends WebCrawler {
 						//Tar bort Wikipedias referenser
 					}
 					matcher2.appendTail(buffer2);
-
 					text = buffer2.toString();
-							
+
 					String[] sentences = text.split("[.] "); //array där varje element är en mening i paragrafen
 					for(int i = 0; i < sentences.length; i++){
 						if(sentences[i].contains(lastName)){
@@ -215,12 +191,11 @@ public class BasicCrawler extends WebCrawler {
 							}
 							sentence = sentence.replaceAll(lastName, replacement);
 							if(!sentence.endsWith(".")) sentence = sentence + ".";
-							
+
 							if(sentence.length() <= MAXIMUM_QUESTION_LENGTH && sentence.length() >= MINIMUM_QUESTION_LENGTH){
 								ArrayList<String> currentStatements = new ArrayList<String>();
 								if(statements.get(fullName) != null) currentStatements.addAll(statements.get(fullName));
 								currentStatements.add(sentence);
-								System.out.println(fullName+"\t\t"+sentence);
 								statements.put(fullName, currentStatements);
 							}
 						}
@@ -233,5 +208,18 @@ public class BasicCrawler extends WebCrawler {
 			e.printStackTrace();
 		}
 		System.out.println("=============");
+	}
+
+	public JSONArray getJSON(){
+		return jsons;
+	}
+
+	private static void addJSON(String question, String[] alternatives, String[] hints, String answer) throws JSONException{
+		JSONObject json = new JSONObject();
+		json.put("Question", question);
+		json.put("Alternatives", alternatives);
+		json.put("Hints", hints);
+		json.put("Answer", answer);
+		jsons.put(json);
 	}
 }
