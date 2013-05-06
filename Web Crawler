@@ -48,18 +48,15 @@ import org.jsoup.select.Elements;
  * @author kalle
  */
 public class BasicCrawler extends WebCrawler {
-	static final String[] celebList = new String[166];//{"Marilyn Monroe","Mother Teresa","John F. Kennedy","Martin Luther King","Nelson Mandela"};
-	static final int MAXIMUM_QUESTION_LENGTH = 130;
+	static final String[] celebList = new String[166];
 	static final int MINIMUM_QUESTION_LENGTH = 40;
+	static final int MAXIMUM_QUESTION_LENGTH = 130;
 	static final int NUMBER_OF_HINTS = 3;
 	static final String[] namePrefixes = {"De", "Du", "Van der", "Von", "Den", "Van",
 		"D'", "De la", "Le", "La", "Des", "A", "Da", "Del", "Della", "Di", "Li", "Lo", "Dos", "De La", "Las", "Af", "Av"};
 
-	
-	static ArrayList<String> questions = new ArrayList<String>();
-	static ArrayList<String> answers = new ArrayList<String>();
-	static HashMap<String,ArrayList<String>> hints = new HashMap<String,ArrayList<String>>(); //maps answer to array of hints
-	static HashMap<String,ArrayList<String>> alternatives = new HashMap<String,ArrayList<String>>();
+	static HashMap<String,ArrayList<String>> statements = new HashMap<String,ArrayList<String>>(); //maps answer to array of statements
+	static HashMap<String,ArrayList<String>> alternatives = new HashMap<String,ArrayList<String>>(); //maps answer to names to use as alternatives
 	
 	public static void main(String[] args) throws JSONException {
 		Arrays.sort(namePrefixes);
@@ -84,34 +81,60 @@ public class BasicCrawler extends WebCrawler {
 		for (int i = 0; i < celebList.length; i++) {
 			WebURL url = new WebURL();
 			url.setURL("https://en.wikipedia.org/wiki/" + celebList[i].replace(" ",	"_"));
-			Page page = new Page(url);
-			crawler.visit(page);
+			crawler.visit(new Page(url));
 		}
 		
 		
-		JSONObject[] jsons = new JSONObject[questions.size()];
-		for (int i = 0; i < 10/*questions.size()*/; i++) {
-			int k = random.nextInt(questions.size());
+		JSONObject[] jsons = new JSONObject[statements.size()];
+		
+		int JSONcount = 0;
+		for(String answer : statements.keySet()){
+			//int k = i;//random.nextInt(statements.values().size());
+			//System.out.println(statements.values().size());
+			
 			JSONObject json = new JSONObject();
-			json.put("Question", questions.get(k));
-			System.out.println(questions.get(k));
-			String answer = answers.get(k);
+			
 			json.put("Answer", answer);
+			
+			ArrayList<Integer> statementNr = new ArrayList<Integer>();
+			ArrayList<String> list = statements.get(answer);
+			
+			statementNr.add(random.nextInt(list.size()));
+			String question = list.get(statementNr.get(0));
+			json.put("Question", question);
+			System.out.println(question);
+			
 			String h[] = new String[NUMBER_OF_HINTS];
 			for(int j = 0; j < h.length; j++){
-				h[j] = hints.get(answer).get(random.nextInt(hints.get(answer).size()));
+				int randomHint = random.nextInt(list.size());
+				while (statementNr.contains(randomHint)){//to avoid duplicates
+					randomHint = random.nextInt(list.size());
+				}
+				statementNr.add(randomHint);
+				h[j] = list.get(randomHint);
 				System.out.println(h[j]);
 			}
 			json.put("Hints", h);
+			
+			System.out.println("Alt #1\t" + answer);
 			String[] alts = new String[3];
+			statementNr.clear();
 			for(int j = 0; j < alts.length; j++){
-				alts[j] = alternatives.get(answer).get(random.nextInt(alternatives.get(answer).size()));
-				System.out.println("Alt #" + (j+1) + "\t" + alts[j]);
+				int randAlt = random.nextInt(alternatives.get(answer).size());
+				while(statementNr.contains(randAlt)){//to avoid duplicates
+					randAlt = random.nextInt(alternatives.get(answer).size());
+				}
+				alts[j] = alternatives.get(answer).get(randAlt);
+				System.out.println("Alt #" + (j+2) + "\t" + alts[j]);
 			}
-			System.out.println("Alt #" + 4 + "\t" + answer);
+			
 			json.put("Alternatives", alts);
+			System.out.println(json);
 			System.out.println();
-			jsons[k] = json;
+			
+			JSONcount++;
+			jsons[JSONcount] = json;
+			
 			/*
 			 * Exempel-utskrift med nuvarande prints:
 			 * 
@@ -194,18 +217,14 @@ public class BasicCrawler extends WebCrawler {
 								sentence = sentence.replaceAll(fullName.replace(".", ""), replacement);
 							}
 							sentence = sentence.replaceAll(lastName, replacement);
-							if(sentence.contains("\\")){
-								System.out.println(sentence);
-							}
 							if(!sentence.endsWith(".")) sentence = sentence + ".";
 							
 							if(sentence.length() <= MAXIMUM_QUESTION_LENGTH && sentence.length() >= MINIMUM_QUESTION_LENGTH){
-								questions.add(sentence);
-								answers.add(fullName);
-								ArrayList<String> theseHints = new ArrayList<String>();
-								if(hints.get(fullName) != null) theseHints.addAll(hints.get(fullName));
-								theseHints.add(sentence);
-								hints.put(fullName, theseHints);
+								ArrayList<String> currentStatements = new ArrayList<String>();
+								if(statements.get(fullName) != null) currentStatements.addAll(statements.get(fullName));
+								currentStatements.add(sentence);
+								System.out.println(fullName+"\t\t"+sentence);
+								statements.put(fullName, currentStatements);
 							}
 						}
 					}
