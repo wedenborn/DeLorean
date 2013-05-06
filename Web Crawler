@@ -84,14 +84,10 @@ public class BasicCrawler extends WebCrawler {
 			crawler.visit(new Page(url));
 		}
 		
-		
 		JSONObject[] jsons = new JSONObject[statements.size()];
 		
 		int JSONcount = 0;
 		for(String answer : statements.keySet()){
-			//int k = i;//random.nextInt(statements.values().size());
-			//System.out.println(statements.values().size());
-			
 			JSONObject json = new JSONObject();
 			
 			json.put("Answer", answer);
@@ -118,12 +114,13 @@ public class BasicCrawler extends WebCrawler {
 			
 			System.out.println("Alt #1\t" + answer);
 			String[] alts = new String[3];
-			statementNr.clear();
+			ArrayList<Integer> altNr = new ArrayList<Integer>();
 			for(int j = 0; j < alts.length; j++){
 				int randAlt = random.nextInt(alternatives.get(answer).size());
-				while(statementNr.contains(randAlt)){//to avoid duplicates
+				while(altNr.contains(randAlt)){//to avoid duplicates
 					randAlt = random.nextInt(alternatives.get(answer).size());
 				}
+				altNr.add(randAlt);
 				alts[j] = alternatives.get(answer).get(randAlt);
 				System.out.println("Alt #" + (j+2) + "\t" + alts[j]);
 			}
