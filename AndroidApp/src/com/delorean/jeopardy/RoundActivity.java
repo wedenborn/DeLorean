@@ -80,7 +80,7 @@ public class RoundActivity extends Activity {
 			butt.setText(question.incorrectAnswers[i].answer);
 			butt.setOnClickListener(new View.OnClickListener() {
 				@Override public void onClick(View v) {	
-					butt.setBackgroundResource(R.drawable.red_button_background);
+					butt.setBackgroundResource(R.drawable.red_gradient_outline);
 					inCorrectAnswerButtonPushed(v);}});
 		}
 
@@ -144,7 +144,7 @@ public class RoundActivity extends Activity {
 	}
 
 	public void correctAnswerButtonPushed(View view) {
-		answerButtons.get(correctAnswerPosition).setBackgroundResource(R.drawable.green_button_background);
+		answerButtons.get(correctAnswerPosition).setBackgroundResource(R.drawable.green_gradient_outline);
 		final Intent intent = new Intent(this, RoundActivity.class);
 		int id = -1;//randomQuestionID();
     	intent.putExtra(HomeActivity.QUESTION_ID, id);
@@ -161,7 +161,7 @@ public class RoundActivity extends Activity {
 	}
 
 	public void inCorrectAnswerButtonPushed(View view) {
-		answerButtons.get(correctAnswerPosition).setBackgroundResource(R.drawable.green_button_background);
+		answerButtons.get(correctAnswerPosition).setBackgroundResource(R.drawable.green_gradient_outline);
 		final Intent intent = new Intent(this, RoundActivity.class);
 		int id = -1;//randomQuestionID();
     	intent.putExtra(HomeActivity.QUESTION_ID, id);

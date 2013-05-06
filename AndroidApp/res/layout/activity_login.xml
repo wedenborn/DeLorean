@@ -5,6 +5,7 @@
     android:layout_gravity="center"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:background="#38a2fb"
     tools:context=".LoginActivity" >
 
     <Button
@@ -12,21 +13,25 @@
         android:layout_width="175dip"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dip"
+        android:layout_marginBottom="2dip"
         android:onClick="signIn"
-        android:text="@string/login_button_signIn" />
+        android:text="@string/login_button_signIn"
+        android:background="@drawable/standard_orange_button" />
  
     <Button
         android:id="@+id/login_button_anonymous"
         android:layout_width="175dip"
         android:layout_height="wrap_content"
         android:onClick="playAnonymously"
-        android:text="@string/login_button_anonymous" />
+        android:text="@string/login_button_anonymous"
+        android:background="@drawable/standard_orange_button" />
     
 	<TextView
         android:id="@+id/login_textview_noAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dip"
+        android:textColor="#FFFFFF"
         android:text="@string/login_string_noAccount" />
 
 	<Button
@@ -34,6 +39,7 @@
 	    android:layout_width="175dip"
 	    android:layout_height="wrap_content"
 	    android:onClick="register"
-	    android:text="@string/login_button_register" />
+	    android:text="@string/login_button_register"
+	    android:background="@drawable/standard_orange_button" />
 
 </LinearLayout>

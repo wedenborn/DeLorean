@@ -84,6 +84,83 @@ public class TMPdb {
 		q3.addHint("He was included in The Beast's publication of their 50 Most Loathsome People of 2004.");
 		q3.addHint("He is known for his Scientologist faith and for his support of the Church of Scientology.");
 		questions.add(q3);
+		
+		Question q4 = new Question();
+		q4.setQuestion("This person's religious zeal grew until he felt he had found his true vocation.");
+		q4.setCorrectAnswer(new Answer("Vincent Van Gogh"));
+		Answer[] q4answers = {new Answer("Jesus"),  new Answer("Shief Al Kalif"), new Answer("Abraham")};
+		q4.setIncorrectAnswers(q4answers);
+		q4.setId(4);
+		q4.addHint("He began to draw as a child.");
+		q4.addHint("This person spent his early adulthood working for a firm of art dealers.");
+		q4.addHint("The extent to which his mental health affected his painting has been a subject of speculation since his death..");
+		questions.add(q4);
+		
+		Question q5 = new Question();
+		q5.setQuestion("Eroica is a 1949 Austrian film depicting life and works of this person.");
+		q5.setCorrectAnswer(new Answer("Ludwig van Beethoven"));
+		Answer[] q5answers = {new Answer("Adolf Hitler"),  new Answer("Leonardo Da Vinci"), new Answer("Jesus")};
+		q5.setIncorrectAnswers(q5answers);
+		q5.setId(5);
+		q5.addHint("He had some hair.");
+		q5.addHint("A crucial figure in the transition between the Classical and Romantic eras in Western art music.");
+		q5.addHint("A German composer and pianist.");
+		questions.add(q5);
+		
+		Question q6 = new Question();
+		q6.setQuestion("For one year this person and his men remained stranded on Jamaica.");
+		q6.setCorrectAnswer(new Answer("Christopher Columbus"));
+		Answer[] q6answers = {new Answer("Paul Newman"),  new Answer("50 cent"), new Answer("Jesus")};
+		q6.setIncorrectAnswers(q6answers);
+		q6.setId(6);
+		q6.addHint("He is from Italy.");
+		q6.addHint("He was an explorer.");
+		q6.addHint("He died 54 years old.");
+		questions.add(q6);
+		
+		Question q7 = new Question();
+		q7.setQuestion("The star is located at the pedestrian entrance to the this personland Resort on Harbor Boulevard.");
+		q7.setCorrectAnswer(new Answer("Walt Disney"));
+		Answer[] q7answers = {new Answer("Jesus"),  new Answer("Dustin Hoffman"), new Answer("J.K. Rowling")};
+		q7.setIncorrectAnswers(q7answers);
+		q7.setId(7);
+		q7.addHint("In 1995, this person Pictures distributed Pixar's Toy Story, the first computer animated feature film.");
+		q7.addHint("The this person studio expanded and Walt re-hired Harman, Rudolph Ising, Carman Maxwell, and Friz Freleng from Kansas City.");
+		q7.addHint("This person has one of the world's first theme parks, which opened on July 17, 1955, and was immediately successful.");
+		questions.add(q7);
+		
+		Question q8 = new Question();
+		q8.setQuestion("Most of this person's greatest post-1599 plays were written for the Globe, including Hamlet, Othello and King Lear.");
+		q8.setCorrectAnswer(new Answer("William Shakespeare"));
+		Answer[] q8answers = {new Answer("Paul Newman"),  new Answer("Dustin Hoffman"), new Answer("Ben Stiller")};
+		q8.setIncorrectAnswers(q8answers);
+		q8.setId(8);
+		q8.addHint("The actors in this person's company included the famous Richard Burbage, William Kempe, Henry Condell and John Heminges.");
+		q8.addHint("It is not clear for which companies this person wrote his early plays.");
+		q8.addHint("At the age of 18, this person married the 26-year-old Anne Hathaway.");
+		questions.add(q8);
+		
+		Question q9 = new Question();
+		q9.setQuestion("Botstein notes that music assumed a pivotal and permanent role in this person's life from that period on.");
+		q9.setCorrectAnswer(new Answer("Albert Einstein"));
+		Answer[] q9answers = {new Answer("Paul Newman"),  new Answer("Isac Newton"), new Answer("Leonard Hofstadter")};
+		q9.setIncorrectAnswers(q9answers);
+		q9.setId(9);
+		q9.addHint("In 1916, this person was appointed president of the German Physical Society.");
+		q9.addHint("His mother's name was Pauline.");
+		q9.addHint("He is known for relativity and stuff.");
+		questions.add(q9);
+		
+		Question q10 = new Question();
+		q10.setQuestion("With almost no support in the South, this person swept the North and was elected president in 1860.");
+		q10.setCorrectAnswer(new Answer("Abraham Lincoln"));
+		Answer[] q10answers = {new Answer("George Bush"),  new Answer("John F. Kennedy"), new Answer("Lyndon B. Johnson")};
+		q10.setIncorrectAnswers(q10answers);
+		q10.setId(10);
+		q10.addHint("This person also presided over the expansion of the federal government's economic influence in several other areas.");
+		q10.addHint("Responding to criticism of Grant after Shiloh, this person had said, \"I can't spare this man\"");
+		q10.addHint("Troops headed south towards Washington to protect the capital in response to this person's call.");
+		questions.add(q10);
 	}
 	
 	public int numberOfQuestions() {
