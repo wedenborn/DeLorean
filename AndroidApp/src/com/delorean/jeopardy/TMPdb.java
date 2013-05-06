@@ -95,7 +95,7 @@ public class TMPdb {
 		q4.addHint("This person spent his early adulthood working for a firm of art dealers.");
 		q4.addHint("The extent to which his mental health affected his painting has been a subject of speculation since his death..");
 		questions.add(q4);
-		 
+		
 		Question q5 = new Question();
 		q5.setQuestion("Eroica is a 1949 Austrian film depicting life and works of this person.");
 		q5.setCorrectAnswer(new Answer("Ludwig van Beethoven"));
