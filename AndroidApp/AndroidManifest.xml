@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.example.jeapordytest"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.delorean.jeopardy"
     android:versionCode="1"
-    android:versionName="1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    android:versionName="1.0" >
 
     <uses-sdk
         android:minSdkVersion="4"
@@ -12,8 +13,9 @@
         android:icon="@drawable/newlogo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <activity android:name="com.delorean.jeopardy.LoginActivity"
-            android:label="@string/intro_title">
+        <activity
+            android:name="com.delorean.jeopardy.LoginActivity"
+            android:label="@string/intro_title" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,8 +27,24 @@
             android:label="@string/home_title" />
         <activity
             android:name="com.delorean.jeopardy.RoundActivity"
-            android:parentActivityName="com.delorean.jeopardy.HomeActivity"
-            android:label="@string/round_title"/>
+            android:label="@string/round_title"
+            android:parentActivityName="com.delorean.jeopardy.HomeActivity" />
+        <activity
+            android:name="com.delorean.jeopardy.SignInActivity"
+            android:label="@string/signIn_title"
+            android:parentActivityName="com.delorean.jeopardy.LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.delorean.jeopardy.LoginActivity" />
+        </activity>
+        <activity
+            android:name="com.delorean.jeopardy.RegisterActivity"
+            android:label="@string/register_title"
+            android:parentActivityName="com.delorean.jeopardy.LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.delorean.jeopardy.LoginActivity" />
+        </activity>
     </application>
 
 </manifest>

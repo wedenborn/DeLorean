@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.jeapordytest.R;
+import com.delorean.jeopardy.R;
 
 public class RoundActivity extends Activity {
 	public TMPdb db;

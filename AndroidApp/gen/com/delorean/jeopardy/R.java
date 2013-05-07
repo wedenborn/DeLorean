@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.example.jeapordytest;
+package com.delorean.jeopardy;
 
 public final class R {
     public static final class attr {
@@ -32,12 +32,12 @@ public final class R {
         public static final int white_text_field=0x7f020008;
     }
     public static final class id {
-        public static final int action_settings=0x7f080016;
-        public static final int answer_1=0x7f08000a;
-        public static final int answer_2=0x7f08000b;
-        public static final int answer_3=0x7f08000c;
-        public static final int answer_4=0x7f08000d;
-        public static final int hint_button=0x7f08000e;
+        public static final int action_settings=0x7f08001d;
+        public static final int answer_1=0x7f080010;
+        public static final int answer_2=0x7f080011;
+        public static final int answer_3=0x7f080012;
+        public static final int answer_4=0x7f080013;
+        public static final int hint_button=0x7f080014;
         public static final int home_andom_question_button=0x7f080001;
         public static final int home_highscore_button=0x7f080002;
         public static final int home_select_question_button=0x7f080000;
@@ -46,25 +46,36 @@ public final class R {
         public static final int login_button_register=0x7f080007;
         public static final int login_button_signIn=0x7f080004;
         public static final int login_textview_noAccount=0x7f080006;
-        public static final int question_id_text=0x7f080008;
-        public static final int question_text=0x7f080009;
-        public static final int register_confirm_password=0x7f080012;
-        public static final int register_password=0x7f080011;
-        public static final int register_title=0x7f08000f;
-        public static final int register_username=0x7f080010;
-        public static final int signIn_password=0x7f080015;
-        public static final int signIn_title=0x7f080013;
-        public static final int signIn_username=0x7f080014;
+        public static final int question_id_text=0x7f08000e;
+        public static final int question_text=0x7f08000f;
+        public static final int register_button_create=0x7f08000d;
+        public static final int register_confirm_password=0x7f08000b;
+        public static final int register_confirm_passwordDialog=0x7f08001c;
+        public static final int register_password=0x7f08000a;
+        public static final int register_passwordDialog=0x7f08001b;
+        public static final int register_title=0x7f080008;
+        public static final int register_titleDialog=0x7f080019;
+        public static final int register_username=0x7f080009;
+        public static final int register_usernameDialog=0x7f08001a;
+        public static final int signIn_password=0x7f080017;
+        public static final int signIn_title=0x7f080015;
+        public static final int signIn_username=0x7f080016;
+        public static final int signin_button_cancel=0x7f08000c;
+        public static final int signin_button_signin=0x7f080018;
     }
     public static final class layout {
         public static final int activity_home=0x7f030000;
         public static final int activity_login=0x7f030001;
-        public static final int activity_round=0x7f030002;
-        public static final int dialog_register=0x7f030003;
-        public static final int dialog_signin=0x7f030004;
+        public static final int activity_register=0x7f030002;
+        public static final int activity_round=0x7f030003;
+        public static final int activity_sign_in=0x7f030004;
+        public static final int dialog_register=0x7f030005;
+        public static final int dialog_signin=0x7f030006;
     }
     public static final class menu {
         public static final int home=0x7f070000;
+        public static final int register=0x7f070001;
+        public static final int sign_in=0x7f070002;
     }
     public static final class string {
         public static final int action_settings=0x7f050002;

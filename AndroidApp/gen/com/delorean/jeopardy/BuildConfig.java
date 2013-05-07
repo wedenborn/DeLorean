@@ -1,5 +1,5 @@
 /** Automatically generated file. DO NOT MODIFY */
-package com.example.jeapordytest;
+package com.delorean.jeopardy;
 
 public final class BuildConfig {
     public final static boolean DEBUG = true;

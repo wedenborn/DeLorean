@@ -2,7 +2,7 @@ package com.delorean.jeopardy;
 
 import java.util.Random;
 
-import com.example.jeapordytest.R;
+import com.delorean.jeopardy.R;
 
 import android.app.Activity;
 import android.content.Intent;

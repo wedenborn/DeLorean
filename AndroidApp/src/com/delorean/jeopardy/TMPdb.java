@@ -119,7 +119,7 @@ public class TMPdb {
 		questions.add(q6);
 		
 		Question q7 = new Question();
-		q7.setQuestion("The star is located at the pedestrian entrance to the this personland Resort on Harbor Boulevard.");
+		q7.setQuestion("The star is located at the pedestrian entrance to the this persons Resort on Harbor Boulevard.");
 		q7.setCorrectAnswer(new Answer("Walt Disney"));
 		Answer[] q7answers = {new Answer("Jesus"),  new Answer("Dustin Hoffman"), new Answer("J.K. Rowling")};
 		q7.setIncorrectAnswers(q7answers);
