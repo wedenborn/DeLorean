@@ -31,6 +31,9 @@
     <string name="round_button_answer_3">Answer 3</string>
     <string name="round_button_answer_4">Answer 4</string>
     <string name="round_button_hint">Hint</string>
-   
+    <string name="title_activity_select_question">Select Question</string>
+    <string name="select_question_confirm_button">Start</string>
+    <string name="select_question_choose_question">Choose a question:</string>
+    
 
 </resources>

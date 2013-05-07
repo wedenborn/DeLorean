@@ -141,7 +141,7 @@ public class TMPdb {
 		questions.add(q8);
 		
 		Question q9 = new Question();
-		q9.setQuestion("Botstein notes that music assumed a pivotal and permanent role in this person's life from that period on.");
+		q9.setQuestion("Botstein notes that music assumed a pivotal and permanent role in this person's life.");
 		q9.setCorrectAnswer(new Answer("Albert Einstein"));
 		Answer[] q9answers = {new Answer("Paul Newman"),  new Answer("Isac Newton"), new Answer("Leonard Hofstadter")};
 		q9.setIncorrectAnswers(q9answers);

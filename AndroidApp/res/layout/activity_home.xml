@@ -15,10 +15,11 @@
         android:layout_marginTop="50dip"
         android:layout_marginBottom="2dip"
         android:text="@string/home_button_select_question"
+        android:onClick="toSelectQuestion"
         android:background="@drawable/standard_orange_button" />
 
     <Button
-        android:id="@+id/home_andom_question_button"
+        android:id="@+id/home_random_question_button"
         android:layout_width="175dip"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dip"

@@ -45,6 +45,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.delorean.jeopardy.LoginActivity" />
         </activity>
+        <activity
+            android:name="com.delorean.jeopardy.SelectQuestionActivity"
+            android:label="@string/title_activity_select_question"
+            android:parentActivityName="com.delorean.jeopardy.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.delorean.jeopardy.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

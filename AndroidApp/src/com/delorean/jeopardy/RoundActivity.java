@@ -1,6 +1,7 @@
 package com.delorean.jeopardy;
 
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -23,9 +24,11 @@ public class RoundActivity extends Activity {
 	public TMPdb db;
 	public Question question;
 	private List<Integer> placements;
+	private List<Integer> unPlayedQuestions;
 	private List<Button> answerButtons;
 	private int correctAnswerPosition;
 	private int[] inCorrectAnswerPositions;
+	int numberOfQuestions;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,22 +41,36 @@ public class RoundActivity extends Activity {
 		answerButtons = new LinkedList<Button>();
 		inCorrectAnswerPositions = new int[3];
 
+
+
 		setContentView(R.layout.activity_round);
 
 		Intent intent = getIntent();
+		numberOfQuestions = intent.getIntExtra(HomeActivity.NUMBER_OF_QUESTIONS,0);
 		int questionID = intent.getIntExtra(HomeActivity.QUESTION_ID,-1);
-		int previousQuestionID = intent.getIntExtra(HomeActivity.PREVIOUS_QUESTION_ID,-1);
-		Log.d(HomeActivity.LOG_TAG, String.valueOf("Previous Question index: " + previousQuestionID)); // syso check
+		unPlayedQuestions  = intent.getIntegerArrayListExtra(HomeActivity.UNPLAYED_QUESTIONS);
+		try {
+			if(unPlayedQuestions.isEmpty()) {
+				unPlayedQuestions = populateUnPlayedQuestions(unPlayedQuestions);
+				Log.d(HomeActivity.LOG_TAG, String.valueOf("ISEMPTY_IN"));
+			}
+			Log.d(HomeActivity.LOG_TAG, String.valueOf("ISEMPTY_OUT"));
+		} catch(NullPointerException e) {
+			unPlayedQuestions = populateUnPlayedQuestions(unPlayedQuestions);
+		}
+
 
 		if(questionID == -1) { //random question
-			questionID = randomQuestionID(previousQuestionID);
+			questionID = randomQuestionID(unPlayedQuestions);
 		} else { //Selected question manually
 			questionID = questionID - 1; //Index starts at 0
+			unPlayedQuestions.remove(questionID);
 		}
-		
+
 		Log.d(HomeActivity.LOG_TAG, String.valueOf("Question index: " + questionID)); // syso check
 		question = db.getQuestion(questionID);
 		Log.d(HomeActivity.LOG_TAG, String.valueOf("Question ID: " + question.getId())); // syso check
+		Log.d(HomeActivity.LOG_TAG, String.valueOf("-------"));
 
 		TextView questionIDtext = (TextView) findViewById(R.id.question_id_text);
 		TextView questionText = (TextView) findViewById(R.id.question_text);
@@ -66,7 +83,7 @@ public class RoundActivity extends Activity {
 		answerButtons.add( (Button) findViewById(R.id.answer_4) );
 
 
-		
+
 		questionIDtext.setText("Question " + String.valueOf(question.getId()));
 		questionText.setText(question.getQuestion());
 
@@ -108,10 +125,31 @@ public class RoundActivity extends Activity {
 				nextID = rand.nextInt(size);
 			}
 		}
-		
+
 		return nextID;
 	}
 
+	private int randomQuestionID (List<Integer> unPlayedQuestions) {
+		Random rand = new Random();
+		for(Integer integer : unPlayedQuestions) {
+			Log.d(HomeActivity.LOG_TAG, String.valueOf("unPlayed qIndex: " + integer));
+		}
+		int size = unPlayedQuestions.size();
+		int nextID = rand.nextInt(size);
+		Log.d(HomeActivity.LOG_TAG, String.valueOf("RandomRemovedIndex: " + nextID + "of " + (size-1)));
+		return unPlayedQuestions.remove(nextID);
+	}
+ 
+	private List<Integer> populateUnPlayedQuestions (List<Integer> unPlayedQuestions) {
+		Log.d(HomeActivity.LOG_TAG, String.valueOf("Populating... Size = " + numberOfQuestions));
+		unPlayedQuestions = new ArrayList<Integer>();
+		for(int i=0; i<numberOfQuestions;i++) {
+			unPlayedQuestions.add(i);
+			Log.d(HomeActivity.LOG_TAG, String.valueOf("Populate: " +unPlayedQuestions.get(i)));
+		}
+		return unPlayedQuestions;
+	}
+ 
 	/**
 	 * Generates random positions for the correct and incorrect answers
 	 */
@@ -130,7 +168,6 @@ public class RoundActivity extends Activity {
 	private int randomAnswerPlacement () {
 		Random rand = new Random();
 		int placementIndex = rand.nextInt(placements.size());
-		Log.d(HomeActivity.LOG_TAG, String.valueOf("random placement = " + placements.get(placementIndex))); // syso check
 		return placements.remove(placementIndex);
 	}
 
@@ -147,15 +184,16 @@ public class RoundActivity extends Activity {
 		answerButtons.get(correctAnswerPosition).setBackgroundResource(R.drawable.green_gradient_outline);
 		final Intent intent = new Intent(this, RoundActivity.class);
 		int id = -1;//randomQuestionID();
-    	intent.putExtra(HomeActivity.QUESTION_ID, id);
-    	intent.putExtra(HomeActivity.PREVIOUS_QUESTION_ID, question.getId()-1);// -1 cause we want index
-    	
+		intent.putExtra(HomeActivity.QUESTION_ID, id);
+		//intent.putExtra(HomeActivity.PREVIOUS_QUESTION_ID, question.getId()-1);// -1 cause we want index
+		intent.putExtra(HomeActivity.NUMBER_OF_QUESTIONS,numberOfQuestions);
+		intent.putIntegerArrayListExtra(HomeActivity.UNPLAYED_QUESTIONS, (ArrayList<Integer>) unPlayedQuestions);
 		Timer timer = new Timer();
 		timer.schedule( new TimerTask() {
 			public void run() {
-				
-		    	
-		    	startActivity(intent);
+
+
+				startActivity(intent);
 			}
 		}, 1*1000);
 	}
@@ -164,15 +202,17 @@ public class RoundActivity extends Activity {
 		answerButtons.get(correctAnswerPosition).setBackgroundResource(R.drawable.green_gradient_outline);
 		final Intent intent = new Intent(this, RoundActivity.class);
 		int id = -1;//randomQuestionID();
-    	intent.putExtra(HomeActivity.QUESTION_ID, id);
-    	intent.putExtra(HomeActivity.PREVIOUS_QUESTION_ID, question.getId()-1); // -1 cause we want index
-    	
+		intent.putExtra(HomeActivity.QUESTION_ID, id);
+		//		intent.putExtra(HomeActivity.PREVIOUS_QUESTION_ID, question.getId()-1); // -1 cause we want index
+		intent.putExtra(HomeActivity.NUMBER_OF_QUESTIONS,numberOfQuestions);
+		intent.putIntegerArrayListExtra(HomeActivity.UNPLAYED_QUESTIONS, (ArrayList<Integer>) unPlayedQuestions);
+
 		Timer timer = new Timer();
 		timer.schedule( new TimerTask() {
 			public void run() {
-				
-		    	
-		    	startActivity(intent);
+
+
+				startActivity(intent);
 			}
 		}, 2*1000);
 	}
