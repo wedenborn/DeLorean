@@ -62,11 +62,12 @@ public class BasicCrawler extends WebCrawler {
 	static JSONArray jsons = new JSONArray();
 
 	public static void main(String[] args) throws JSONException {
+		
 		Arrays.sort(namePrefixes);
 		for(int i = 0; i < namePrefixes.length; i++){
 			namePrefixes[i] = " " + namePrefixes[i].toLowerCase() + " ";
 		}
-
+		
 		BasicCrawler crawler = new BasicCrawler();
 		try {
 			String[] celebURL = {"http://history1900s.about.com/od/people/tp/famouspeople.htm","http://www.whoismorefamous.com/?fulllist=1"};
@@ -80,7 +81,7 @@ public class BasicCrawler extends WebCrawler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		int qcount = 0;
 
 		for(String answer : statements.keySet()){
 			ArrayList<String> personsStatements = statements.get(answer);
@@ -94,6 +95,7 @@ public class BasicCrawler extends WebCrawler {
 			}
 
 			for (int questionNr = 0; questionNr < personsStatements.size(); questionNr++) {
+				qcount++;
 				String question = personsStatements.get(questionNr);
 
 				ArrayList<Integer> statementNr = new ArrayList<Integer>();
@@ -123,43 +125,9 @@ public class BasicCrawler extends WebCrawler {
 				addJSON(question, alts, hints, answer);
 			}
 		}
-
-		crawler.test();
+		System.out.println("Number of questions: " + qcount);
 	}
 
-	public void test() throws JSONException{
-		int rnd = random.nextInt(jsons.length());
-		JSONObject j = jsons.optJSONObject(rnd);
-		Scanner sc = new Scanner(System.in);
-		int ind = 0;
-		while(sc.hasNext()){
-			String next = sc.next();
-			if(next.startsWith("q")){
-				j = jsons.optJSONObject(random.nextInt(jsons.length()));	
-				ind=0;
-				System.out.println(j.get("Question"));
-			}
-			if(next.startsWith("alt")){
-				String[] alts = (String[]) j.get("Alternatives");
-				int r = random.nextInt(4);
-				for(int i = 0; i < 3; i++){
-					if(i == r) System.out.println(j.get("Answer"));
-					else System.out.println(alts[i]);
-				}
-				if(r == 3) System.out.println(j.get("Answer"));
-				else System.out.println(alts[r]);
-			}
-			if(next.startsWith("h")){
-				String[] hints = (String[]) j.get("Hints");
-				System.out.println(hints[ind%3]);
-				ind++;
-			}
-			if(next.startsWith("ans")){
-				System.out.println(j.get("Answer"));
-			}
-		}
-		sc.close();
-	}
 
 	/**
 	 * This function is called when a page is fetched and ready to be processed
@@ -208,13 +176,15 @@ public class BasicCrawler extends WebCrawler {
 						//Tar bort punkterna så att t.ex. "John F. Kennedy" blir "John F Kennedy" (temporär lösning)
 					}
 					matcher1.appendTail(buffer1);
-					String regex2 = "\\[[0-9]+\\]";
+					String regex2 = "\\[([0-9]+|citation needed|nb [0-9]+|[N|n]ote [0-9]+)\\]";
 					Matcher matcher2 = Pattern.compile(regex2).matcher(buffer1);
 					StringBuffer buffer2 = new StringBuffer();
 					while (matcher2.find()) {
 						matcher2.appendReplacement(buffer2, "");
-						//Tar bort Wikipedias referenser
+						//Tar bort Wikipedias referenser och noter
 					}
+					
+					
 					matcher2.appendTail(buffer2);
 					text = buffer2.toString();
 
@@ -229,7 +199,7 @@ public class BasicCrawler extends WebCrawler {
 							}
 							sentence = sentence.replaceAll(lastName, replacement);
 
-							String regex3 = "[A-Z][a-z]+ " + replacement;
+							String regex3 = "[A-Z][a-z]* " + replacement;
 							String regex4 = "[T|t]he " + replacement;
 							Matcher matcher3 = Pattern.compile(regex3).matcher(sentence);
 							Matcher matcher4 = Pattern.compile(regex4).matcher(sentence);
@@ -254,7 +224,7 @@ public class BasicCrawler extends WebCrawler {
 			}
 			names.remove(fullName); //tar bort svaret som alternativ
 			alternatives.put(fullName, names);
-			System.out.println("Alternatives: " + alternatives.get(fullName)); //printar alla alternativ
+			//System.out.println("Alternatives: " + alternatives.get(fullName)); //printar alla alternativ
 		} catch (IOException e) {
 			//e.printStackTrace();
 		} 
@@ -273,4 +243,6 @@ public class BasicCrawler extends WebCrawler {
 		json.put("Answer", answer);
 		jsons.put(json);
 	}
+	
+
 }
