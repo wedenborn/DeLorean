@@ -1,34 +1,73 @@
 package com.delorean.jeopardy;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
- 
+import org.json.JSONObject;
 
-public class TMPdb {
-	public List<TMPuser> users;
-	public List<Question> questions;
-	public Crawlings crawler;
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
 
-	public TMPdb() {
-		users = new LinkedList<TMPuser>();
+
+public class TMPdb implements Parcelable {
+	public ArrayList<TMPuser> users;
+	public ArrayList<Question> questions;
+	//	public Crawlings crawler;
+//	public Context context;
+	public AssetManager assetManager;
+
+	public TMPdb(AssetManager am) {
+		Log.d(HomeActivity.LOG_TAG, String.valueOf("TMPdb"));
+		users = new ArrayList<TMPuser>();
 		addUser("adam","adam1");
 		addUser("bertil","bertil1");
 		addUser("carl","carl1");
-
-		questions = new LinkedList<Question>();
+//		context = myContext;
+		questions = new ArrayList<Question>();
+		assetManager = am;
+		
+		/*
 		crawler = new Crawlings();
 		try {
 			crawler.runner();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-//		populateQuestionsCrawler();
-		populateQuestionsTest();
+		} */
+
+
+		try {
+			populateQuestionsFiles();
+			Log.d(HomeActivity.LOG_TAG, String.valueOf("POPULATED! size: " + questions.size()));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			Log.d(HomeActivity.LOG_TAG, String.valueOf("CANT POPULATE"));
+			System.out.println("cant populate");
+			e.printStackTrace();
+		} 
+		//		populateQuestionsCrawler();
+		//		populateQuestionsTest();
 	}
 
+	@SuppressWarnings("unchecked")
+	public TMPdb(Parcel in) {
+		users = in.readArrayList(null);
+		questions = in.readArrayList(null);
+	}
+
+	public TMPdb(ArrayList<TMPuser> users, ArrayList<Question> questions) {
+		this.users = users;
+		this.questions = questions;
+	}
 
 	public boolean addUser(String username, String password) {
 		if(containsUser(username)) {
@@ -62,35 +101,79 @@ public class TMPdb {
 	public Question getQuestion(int id) {
 		return questions.get(id);
 	}
-/*
-	public void populateQuestionsCrawler(){
-		for (int i = 0; i < 10; i++) {
+
+
+	public void populateQuestionsFiles() throws FileNotFoundException{
+		for (int i = 0; i < 100; i++) {
+			InputStream inputStream;
 			try {
-				Random random = new Random(); 
-				JSONArray jsons = crawler.getJSON();
-				int rnd = random.nextInt(jsons.length());
-				JSONObject j = jsons.optJSONObject(rnd);
-				Question q1 = new Question();
-				q1.setQuestion(j.getString("Question"));
-				q1.setCorrectAnswer(new Answer(j.getString("Answer")));
-				String[] alts = (String[]) j.get("Alternatives");
-				Answer[] q1answers = { new Answer(alts[0]), new Answer(alts[1]),
-						new Answer(alts[2]) };
-				q1.setIncorrectAnswers(q1answers);
-				q1.setId(rnd);
-				String[] hints = (String[]) j.get("Hints");
-				q1.addHint(hints[0]);
-				q1.addHint(hints[1]);
-				q1.addHint(hints[2]);
-				questions.add(q1);
-			} catch (JSONException e) {
+				inputStream = assetManager.open("test" + i + ".json");
+				Log.d(HomeActivity.LOG_TAG, String.valueOf("FOUND: " + "test" + i + ".json"));
+				InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+				BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+				try {
+					JSONObject j = new JSONObject(bufferedReader.readLine());
+					Question q = new Question();
+					q.setQuestion(j.getString("Question"));
+					q.setCorrectAnswer(new Answer(j.getString("Answer")));
+					JSONArray alts = j.getJSONArray("Alternatives");
+					Answer[] answers = { 	new Answer(alts.getString(0)), 
+							new Answer(alts.getString(1)),
+							new Answer(alts.getString(2)) };
+					q.setIncorrectAnswers(answers);
+					q.setId(i+1);
+					JSONArray hints = j.getJSONArray("Hints");
+					q.addHint(hints.getString(0));
+					q.addHint(hints.getString(1));
+					q.addHint(hints.getString(2));
+					Log.d(HomeActivity.LOG_TAG, String.valueOf("ADDING:" + i));
+					questions.add(q);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (IOException e1) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.d(HomeActivity.LOG_TAG, String.valueOf("DID NOT FIND: " + "test" + i + ".json"));
+				e1.printStackTrace();
 			}
 		}
+
 	}
-*/
-	
+
+	/*
+public void populateQuestionsCrawler(){
+	Random random = new Random(); 
+	JSONArray jsons = crawler.getJSON();
+	for (int i = 0; i < jsons.length() ; i++) {
+		try {
+
+			int rnd = random.nextInt(jsons.length());
+			JSONObject j = jsons.optJSONObject(rnd);
+			Question q1 = new Question();
+			q1.setQuestion(j.getString("Question"));
+			q1.setCorrectAnswer(new Answer(j.getString("Answer")));
+			String[] alts = (String[]) j.get("Alternatives");
+			Answer[] q1answers = { new Answer(alts[0]), new Answer(alts[1]),
+					new Answer(alts[2]) };
+			q1.setIncorrectAnswers(q1answers);
+			q1.setId(rnd);
+			String[] hints = (String[]) j.get("Hints");
+			q1.addHint(hints[0]);
+			q1.addHint(hints[1]);
+			q1.addHint(hints[2]);
+			questions.add(q1);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}
+	 */
+
 	public void populateQuestionsTest () {
 		Question q1 = new Question();
 		q1.setQuestion("This person is an Austrian and American former professional bodybuilder, actor, producer, director, businessman, investor, and politician.");
@@ -202,9 +285,32 @@ public class TMPdb {
 		q10.addHint("Troops headed south towards Washington to protect the capital in response to this person's call.");
 		questions.add(q10);
 	}
-	 	
+
 	public int numberOfQuestions() {
 		return questions.size();
 	}
 
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeList(users);
+		out.writeList(questions);
+	}
+
+	public static final Parcelable.Creator<TMPdb> CREATOR = new Parcelable.Creator<TMPdb>() {
+		public TMPdb createFromParcel(Parcel in) {
+			return new TMPdb(in);
+		}
+
+		public TMPdb[] newArray(int size) {
+			return new TMPdb[size];
+		}
+	};
 } // End TMPdb

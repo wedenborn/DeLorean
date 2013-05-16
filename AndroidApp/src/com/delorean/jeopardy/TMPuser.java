@@ -1,6 +1,9 @@
 package com.delorean.jeopardy;
 
-public class TMPuser {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class TMPuser implements Parcelable {
 	public String username;
 	public String password;
 	public int id;
@@ -11,6 +14,12 @@ public class TMPuser {
 		this.id = id;
 	}
 
+	public TMPuser(Parcel in) {
+		username = in.readString();
+		password = in.readString();
+		id = in.readInt();
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -62,7 +71,30 @@ public class TMPuser {
 		this.id = id;
 	}
 	
-	
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(username);
+		out.writeString(password);
+		out.writeInt(id);
+	}
+
+	public static final Parcelable.Creator<TMPuser> CREATOR = new Parcelable.Creator<TMPuser>() {
+        public TMPuser createFromParcel(Parcel in) {
+            return new TMPuser(in);
+        }
+
+        public TMPuser[] newArray(int size) {
+            return new TMPuser[size];
+        }
+    };
 	
 	
 }

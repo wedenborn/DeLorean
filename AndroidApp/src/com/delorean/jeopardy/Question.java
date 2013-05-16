@@ -1,17 +1,21 @@
 package com.delorean.jeopardy;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Question {
-	public List<Hint> hints;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Question implements Parcelable {
+	public ArrayList<Hint> hints;
 	public Answer correctAnswer;
 	public Answer[] incorrectAnswers;
 	public int id;
 	public String question;
 
-	public Question(List<Hint> hints, Answer correctAnswer,
+	public Question(ArrayList<Hint> hints, Answer correctAnswer,
 			Answer[] incorrectAnswers, int id, String question) {
 
 		this.hints = hints;
@@ -24,7 +28,17 @@ public class Question {
 
 	public Question() {
 		this.incorrectAnswers = new Answer[3];
-		this.hints = new LinkedList<Hint>();
+		this.hints = new ArrayList<Hint>();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Question (Parcel in) {
+		in.readList(hints, null);
+		correctAnswer = in.readParcelable(null);
+		incorrectAnswers = (Answer[]) in.readParcelableArray(null);
+		id = in.readInt();
+		question = in.readString();
+		
 	}
 
 	/* (non-Javadoc)
@@ -87,7 +101,7 @@ public class Question {
 	/**
 	 * @param hints the hints to set
 	 */
-	public void setHints(List<Hint> hints) {
+	public void setHints(ArrayList<Hint> hints) {
 		this.hints = hints;
 	}
 
@@ -155,4 +169,30 @@ public class Question {
 		this.question = question;
 	}
 
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeList(hints);
+		out.writeParcelable(correctAnswer, flags);
+		out.writeParcelableArray(incorrectAnswers, flags);
+		out.writeInt(id);
+		out.writeString(question);
+	}
+
+	public static final Parcelable.Creator<Question> CREATOR = new Parcelable.Creator<Question>() {
+        public Question createFromParcel(Parcel in) {
+            return new Question(in);
+        }
+
+        public Question[] newArray(int size) {
+            return new Question[size];
+        }
+    };
+	
 } // End Question class

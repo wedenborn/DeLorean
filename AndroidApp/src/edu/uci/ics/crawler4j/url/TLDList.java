@@ -21,7 +21,7 @@ public class TLDList {
                 try {
                         while ((line = reader.readLine()) != null) {
                                 line = line.trim();
-                                if (line.isEmpty() || line.startsWith("//")) {
+                                if (line.length()== 0 || line.startsWith("//")) {
                                         continue;
                                 }
                                 tldSet.add(line);

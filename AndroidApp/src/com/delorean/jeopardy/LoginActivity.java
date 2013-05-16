@@ -3,15 +3,16 @@ package com.delorean.jeopardy;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
 
-public class LoginActivity extends FragmentActivity {
+public class LoginActivity extends Activity {
 
 	public Login login;
 
@@ -26,7 +27,9 @@ public class LoginActivity extends FragmentActivity {
 		    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		    StrictMode.setThreadPolicy(policy);
 		}
-		login = new Login();
+		AssetManager assetManager = getAssets();
+		login = new Login(assetManager);
+//		login.createDB(getApplicationContext());
 
 	}
 

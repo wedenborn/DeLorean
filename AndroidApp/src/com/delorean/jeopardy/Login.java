@@ -1,5 +1,7 @@
 package com.delorean.jeopardy;
 
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.util.Log;
 
 public class Login {
@@ -7,16 +9,20 @@ public class Login {
 	public String password;
 	public TMPdb db;
 
-	public Login(String userName, String password) {
+	public Login(String userName, String password, Context context) {
 		this.userName = userName;
 		this.password = password;
-		this.db = new TMPdb();
 	}
 
-	public Login() {
-		this.db = new TMPdb();
-	}
+	public Login(AssetManager as) {
+		this.db = new TMPdb(as);
 
+	}
+	/*
+	public void createDB (Context context) {
+		this.db = new TMPdb(context);
+	}
+*/
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */

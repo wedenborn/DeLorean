@@ -1,5 +1,6 @@
 package com.delorean.jeopardy;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.delorean.jeopardy.R;
@@ -17,13 +18,19 @@ public class HomeActivity extends Activity {
 	public final static String PREVIOUS_QUESTION_ID = "com.delorean.HomeActivity.previousQuestionID";
 	public final static String NUMBER_OF_QUESTIONS = "com.delorean.HomeActivity.numberOfQuestionsInDatabase";
 	public final static String UNPLAYED_QUESTIONS = "com.delorean.HomeActivity.unplayedQuesions";
+//	public final static String DATABASE = "com.delorean.HomeActivity.database";
+//	public final static String DATABASE_USERS = "com.delorean.HomeActivity.databaseUsers";
+//	public final static String DATABASE_QUESTIONS = "com.delorean.HomeActivity.databaseQuestions";
 	public final static String LOG_TAG = "wwoweee";
 	public TMPdb db;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		db = new TMPdb();
+		Intent intent = getIntent();
+		db = new TMPdb(getAssets());
+//				(TMPdb) intent.getParcelableExtra(HomeActivity.DATABASE);
+		
 		setContentView(R.layout.activity_home);
 	}
 

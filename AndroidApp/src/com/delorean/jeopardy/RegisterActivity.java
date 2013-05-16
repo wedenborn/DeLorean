@@ -21,8 +21,10 @@ public class RegisterActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
+		Intent intent = getIntent();
 		
-		login = new Login();
+		login = new Login(getAssets());
+//		login.createDB(this);
 	}
 
 	public void registerClick(View v) {

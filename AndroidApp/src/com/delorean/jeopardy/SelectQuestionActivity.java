@@ -14,6 +14,7 @@ public class SelectQuestionActivity extends Activity {
 
 			String wheelMenu[];
 			int numberOfQuestions;
+			public TMPdb db;
 
 			// Wheel scrolled flag
 			private boolean wheelScrolled = false;
@@ -24,12 +25,15 @@ public class SelectQuestionActivity extends Activity {
 					super.onCreate(savedInstanceState);
 					setContentView(R.layout.activity_select_question);
 					Intent intent = getIntent();
-					numberOfQuestions = intent.getIntExtra(HomeActivity.NUMBER_OF_QUESTIONS,0);
+//					numberOfQuestions = intent.getIntExtra(HomeActivity.NUMBER_OF_QUESTIONS,0);
+					db = new TMPdb(getAssets());
+//					(TMPdb) intent.getParcelableExtra(HomeActivity.DATABASE);
+					numberOfQuestions = db.numberOfQuestions();
 					
 					wheelMenu = generateWheelMenuItems(numberOfQuestions);
 					initWheel(R.id.select_question_wheel);				
 				}
-
+ 
 			// Wheel scrolled listener
 			OnWheelScrollListener scrolledListener = new OnWheelScrollListener()
 				{

@@ -32,7 +32,7 @@ public class RoundActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		db = new TMPdb();
+		
 
 		super.onCreate(savedInstanceState);
 
@@ -46,7 +46,10 @@ public class RoundActivity extends Activity {
 		setContentView(R.layout.activity_round);
 
 		Intent intent = getIntent();
-		numberOfQuestions = intent.getIntExtra(HomeActivity.NUMBER_OF_QUESTIONS,0);
+		db = new TMPdb(getAssets());
+//				(TMPdb) intent.getParcelableExtra(HomeActivity.DATABASE);
+		numberOfQuestions = db.numberOfQuestions();
+//				intent.getIntExtra(HomeActivity.NUMBER_OF_QUESTIONS,0);
 		int questionID = intent.getIntExtra(HomeActivity.QUESTION_ID,-1);
 		unPlayedQuestions  = intent.getIntegerArrayListExtra(HomeActivity.UNPLAYED_QUESTIONS);
 		try {
@@ -206,7 +209,6 @@ public class RoundActivity extends Activity {
 		//		intent.putExtra(HomeActivity.PREVIOUS_QUESTION_ID, question.getId()-1); // -1 cause we want index
 		intent.putExtra(HomeActivity.NUMBER_OF_QUESTIONS,numberOfQuestions);
 		intent.putIntegerArrayListExtra(HomeActivity.UNPLAYED_QUESTIONS, (ArrayList<Integer>) unPlayedQuestions);
-
 		Timer timer = new Timer();
 		timer.schedule( new TimerTask() {
 			public void run() {

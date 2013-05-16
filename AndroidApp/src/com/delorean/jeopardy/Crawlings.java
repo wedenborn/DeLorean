@@ -51,10 +51,13 @@ public class Crawlings {
 			String[] celebURL = {"http://history1900s.about.com/od/people/tp/famouspeople.htm","http://www.whoismorefamous.com/?fulllist=1"};
 			Document doc = Jsoup.connect(celebURL[1]).get();
 			Elements elements = doc.select("li");
+			int count = 0;
 			for (Element element : elements) {
 				WebURL url = new WebURL();
 				url.setURL("https://en.wikipedia.org/wiki/" + element.text().replace(" ",	"_"));
 				crawler.visit(new Page(url));
+				count++;
+				if(count > 5) break;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -99,7 +102,13 @@ public class Crawlings {
 					altNr.add(randAlt);
 					alts[j] = personsAlternatives.get(randAlt);
 				}
-				addJSON(question, alts, hints, answer);
+				if(jsons.length()<3) {
+					addJSON(question, alts, hints, answer);
+					System.out.println("JSONS LENGTH: " + jsons.length());
+				}
+				else {
+					return;
+				}
 			}
 		}
 
@@ -144,7 +153,7 @@ public class Crawlings {
 	 * This function is called when a page is fetched and ready to be processed
 	 * by your program.
 	 */
-	
+
 	public void visit(Page page) {
 		String url = page.getWebURL().getURL();
 		String fullName = url.substring(url.lastIndexOf("/")+1,url.length()).replace("_"," ");
@@ -163,9 +172,11 @@ public class Crawlings {
 			System.out.println("Last name: " + lastName);
 			ArrayList<String> names = new ArrayList<String>(); //alternativen (andra namn som förekommer i artikeln)
 			Elements paragraphs = doc.select("p");
-			for (Element element : paragraphs) {
-				if(element.hasText()){
-					String text = element.text();
+			for(int i=0;i<2;i++) {
+				//			for (Element element : paragraphs) {
+
+				if(paragraphs.get(i).hasText()){
+					String text = paragraphs.get(i).text();
 
 					String nameRegex = "[A-Z][a-z]+ [A-Z][a-z]+"; //regex för att hämta namn för att ha som alternativ (exakt 2 ord atm (3 var oftast inte namn))
 					Elements links = doc.select("a[href]");
@@ -198,9 +209,9 @@ public class Crawlings {
 					text = buffer2.toString();
 
 					String[] sentences = text.split("[.] "); //array där varje element är en mening i paragrafen
-					for(int i = 0; i < sentences.length; i++){
-						if(sentences[i].contains(lastName)){
-							String sentence = sentences[i].trim();
+					for(int j = 0; j < sentences.length; j++){
+						if(sentences[j].contains(lastName)){
+							String sentence = sentences[j].trim();
 							String replacement = "this person";
 							if(sentence.startsWith(fullName) || sentence.startsWith(lastName)) replacement = "This person";
 							if(sentence.contains(fullName.replace(".",""))){ //replace(".", "") bara temporärt
