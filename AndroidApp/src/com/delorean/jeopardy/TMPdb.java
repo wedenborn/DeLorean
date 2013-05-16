@@ -104,7 +104,8 @@ public class TMPdb implements Parcelable {
 
 
 	public void populateQuestionsFiles() throws FileNotFoundException{
-		for (int i = 0; i < 100; i++) {
+		int nextID = 1;
+		for (int i = 0; i < 8000; i+=80) {
 			InputStream inputStream;
 			try {
 				inputStream = assetManager.open("test" + i + ".json");
@@ -121,7 +122,7 @@ public class TMPdb implements Parcelable {
 							new Answer(alts.getString(1)),
 							new Answer(alts.getString(2)) };
 					q.setIncorrectAnswers(answers);
-					q.setId(i+1);
+					q.setId(nextID);
 					JSONArray hints = j.getJSONArray("Hints");
 					q.addHint(hints.getString(0));
 					q.addHint(hints.getString(1));
@@ -140,6 +141,7 @@ public class TMPdb implements Parcelable {
 				Log.d(HomeActivity.LOG_TAG, String.valueOf("DID NOT FIND: " + "test" + i + ".json"));
 				e1.printStackTrace();
 			}
+			nextID++;
 		}
 
 	}
